@@ -69,6 +69,41 @@ namespace Horudom.Helpers
                 LastName = writer.LastName
             };
         }
+        public static GenreDto ToDto(this Genre genre)
+        {
+            if (genre == null)
+            {
+                throw new ArgumentNullException(nameof(genre));
+            }
 
+            return new GenreDto
+            {
+                Name = genre.Name
+            };
+        }
+        public static ScreenshotDto ToDto(this Screenshot screenshot)
+        {
+            if (screenshot == null)
+            {
+                throw new ArgumentNullException(nameof(screenshot));
+            }
+
+            return new ScreenshotDto
+            {
+                Url = screenshot.Url
+            };
+        }
+        public static PosterDto ToDto(this Poster poster)
+        {
+            if (poster == null)
+            {
+                throw new ArgumentNullException(nameof(poster));
+            }
+
+            return new PosterDto
+            {
+                Url = poster.Url
+            };
+        }
     }
 }
