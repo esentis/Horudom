@@ -24,14 +24,13 @@ namespace Horudom.Data
         public DbSet<MoviePoster> MoviePosters { get; set; }
         public DbSet<MovieScreenshot> MovieScreenshots { get; set; }
         public DbSet<MovieWriter> MovieWriters { get; set; }
-        public DbSet<Origin> Origins { get; set; }
         public DbSet<Poster> Posters { get; set; }
         public DbSet<Screenshot> Screenshots { get; set; }
         public DbSet<Writer> Writers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            
+
             modelBuilder.Entity<MovieActor>(e =>
             {
                 e.HasOne(mv => mv.Movie)
@@ -40,7 +39,7 @@ namespace Horudom.Data
                 e.HasOne(mv => mv.Actor)
                     .WithMany()
                     .HasForeignKey("ActorId").OnDelete(DeleteBehavior.Restrict);
-                e.HasKey("MovieId","ActorId");
+                e.HasKey("MovieId", "ActorId");
             });
 
             modelBuilder.Entity<MovieDirector>(e =>
