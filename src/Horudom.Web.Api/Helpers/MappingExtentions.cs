@@ -1,4 +1,4 @@
-﻿using Horudom.Dto;
+using Horudom.Dto;
 using Horudom.Models;
 using System;
 using System.Collections.Generic;
@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Horudom.Helpers
 {
-    public static class MappingExtentsions
+    public static class MappingExtentions
     {
         public static MovieDto ToDto(this Movie movie)
         {
