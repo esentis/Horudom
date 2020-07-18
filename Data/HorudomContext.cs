@@ -28,6 +28,7 @@ namespace Horudom.Data
         public DbSet<Screenshot> Screenshots { get; set; }
         public DbSet<Writer> Writers { get; set; }
 
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 

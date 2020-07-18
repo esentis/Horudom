@@ -15,18 +15,26 @@ namespace Horudom.Controller
     [ApiController]
     public class MovieController : ControllerBase
     {
-        HorudomContext ctx;
-        public MovieController(HorudomContext Ctx)
+        private readonly IHorudomRepo _repository;
+        public MovieController(IHorudomRepo repository)
         {
-            ctx = Ctx;
+            _repository = repository;
         }
+
         [HttpGet("")]
         public async Task<ActionResult<List<MovieDto>>> GetMovies()
         {
-            var movies = await ctx.Movies.ToListAsync();
+            var movies = _repository.GetMovies();
 
             var result = movies.Select(x => x.ToDto()).ToList();
             return Ok(result);
+        }
+        [HttpGet("{title}")]
+        public async Task<ActionResult<List<MovieDto>>> GetMoviesByTitle(string title)
+        {
+            var movie = _repository.GetMovieByTitle(title);
+            if (movie == null) return NotFound("Movie " + title + " not found");
+            return Ok(movie);
         }
 
     }
