@@ -4,7 +4,7 @@ namespace Horudom.Models
 
 	public class Actor
 	{
-		public int Id { get; set; }
+		public long Id { get; set; }
 
 		public string FirstName { get; set; }
 

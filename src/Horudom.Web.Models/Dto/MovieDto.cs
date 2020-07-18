@@ -4,6 +4,8 @@ namespace Horudom.Dto
 
 	public class MovieDto
 	{
+		public long Id { get; set; }
+
 		public string Title { get; set; }
 
 		public int Duration { get; set; } // Minutes
