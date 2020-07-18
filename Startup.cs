@@ -29,8 +29,6 @@ namespace Horudom
         {
 
             services.AddControllers();
-            // Whenever we ask for IHorudomRepo we give back PostgreRepo
-            services.AddScoped<IHorudomRepo, PostgreRepo>();
             services.AddDbContext<HorudomContext>(options =>
             options.UseNpgsql(Configuration.GetConnectionString("Horudom")));
         }
