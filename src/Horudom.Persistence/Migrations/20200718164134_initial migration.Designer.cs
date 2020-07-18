@@ -7,11 +7,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
-namespace Horudom.Migrations
+namespace Esentis.Horudom.Persistence.Migrations
 {
     [DbContext(typeof(HorudomContext))]
-    [Migration("20200718102528_InitialMigrations")]
-    partial class InitialMigrations
+    [Migration("20200718164134_initial migration")]
+    partial class initialmigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -29,15 +29,18 @@ namespace Horudom.Migrations
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("Bio")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime>("BirthDate")
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("FirstName")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("LastName")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
@@ -53,15 +56,19 @@ namespace Horudom.Migrations
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("Bio")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("BirthDate")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("FirstName")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("LastName")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
@@ -77,6 +84,7 @@ namespace Horudom.Migrations
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
@@ -92,18 +100,21 @@ namespace Horudom.Migrations
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("CountryOrigin")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<int>("Duration")
                         .HasColumnType("integer");
 
                     b.Property<string>("Plot")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime>("ReleaseDate")
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Title")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
@@ -113,10 +124,10 @@ namespace Horudom.Migrations
 
             modelBuilder.Entity("Horudom.Models.MovieActor", b =>
                 {
-                    b.Property<long?>("MovieId")
+                    b.Property<long>("MovieId")
                         .HasColumnType("bigint");
 
-                    b.Property<int?>("ActorId")
+                    b.Property<int>("ActorId")
                         .HasColumnType("integer");
 
                     b.HasKey("MovieId", "ActorId");
@@ -128,10 +139,10 @@ namespace Horudom.Migrations
 
             modelBuilder.Entity("Horudom.Models.MovieDirector", b =>
                 {
-                    b.Property<long?>("MovieId")
+                    b.Property<long>("MovieId")
                         .HasColumnType("bigint");
 
-                    b.Property<int?>("DirectorId")
+                    b.Property<int>("DirectorId")
                         .HasColumnType("integer");
 
                     b.HasKey("MovieId", "DirectorId");
@@ -143,10 +154,10 @@ namespace Horudom.Migrations
 
             modelBuilder.Entity("Horudom.Models.MovieGenre", b =>
                 {
-                    b.Property<long?>("MovieId")
+                    b.Property<long>("MovieId")
                         .HasColumnType("bigint");
 
-                    b.Property<int?>("GenreId")
+                    b.Property<int>("GenreId")
                         .HasColumnType("integer");
 
                     b.HasKey("MovieId", "GenreId");
@@ -158,10 +169,10 @@ namespace Horudom.Migrations
 
             modelBuilder.Entity("Horudom.Models.MoviePoster", b =>
                 {
-                    b.Property<long?>("MovieId")
+                    b.Property<long>("MovieId")
                         .HasColumnType("bigint");
 
-                    b.Property<int?>("PosterId")
+                    b.Property<int>("PosterId")
                         .HasColumnType("integer");
 
                     b.HasKey("MovieId", "PosterId");
@@ -173,10 +184,10 @@ namespace Horudom.Migrations
 
             modelBuilder.Entity("Horudom.Models.MovieScreenshot", b =>
                 {
-                    b.Property<long?>("MovieId")
+                    b.Property<long>("MovieId")
                         .HasColumnType("bigint");
 
-                    b.Property<int?>("ScreenshotId")
+                    b.Property<int>("ScreenshotId")
                         .HasColumnType("integer");
 
                     b.HasKey("MovieId", "ScreenshotId");
@@ -188,10 +199,10 @@ namespace Horudom.Migrations
 
             modelBuilder.Entity("Horudom.Models.MovieWriter", b =>
                 {
-                    b.Property<long?>("MovieId")
+                    b.Property<long>("MovieId")
                         .HasColumnType("bigint");
 
-                    b.Property<int?>("WriterId")
+                    b.Property<int>("WriterId")
                         .HasColumnType("integer");
 
                     b.HasKey("MovieId", "WriterId");
@@ -209,6 +220,7 @@ namespace Horudom.Migrations
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("Url")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
@@ -224,6 +236,7 @@ namespace Horudom.Migrations
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("Url")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
@@ -239,15 +252,19 @@ namespace Horudom.Migrations
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("Bio")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("BirthDate")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("FirstName")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("LastName")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
