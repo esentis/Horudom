@@ -16,6 +16,7 @@ namespace Horudom.Helpers
 
 			return new MovieDto
 			{
+				Id = movie.Id,
 				Title = movie.Title,
 				Duration = movie.Duration,
 				Plot = movie.Plot,
@@ -32,6 +33,7 @@ namespace Horudom.Helpers
 
 			return new ActorDto
 			{
+				Id = actor.Id,
 				FirstName = actor.FirstName,
 				Bio = actor.Bio,
 				BirthDate = actor.BirthDate,
@@ -48,6 +50,7 @@ namespace Horudom.Helpers
 
 			return new DirectorDto
 			{
+				Id = director.Id,
 				FirstName = director.FirstName,
 				Bio = director.Bio,
 				BirthDate = director.BirthDate,
@@ -64,6 +67,7 @@ namespace Horudom.Helpers
 
 			return new WriterDto
 			{
+				Id = writer.Id,
 				FirstName = writer.FirstName,
 				Bio = writer.Bio,
 				BirthDate = writer.BirthDate,
@@ -80,6 +84,7 @@ namespace Horudom.Helpers
 
 			return new GenreDto
 			{
+				Id = genre.Id,
 				Name = genre.Name,
 			};
 		}
@@ -93,6 +98,7 @@ namespace Horudom.Helpers
 
 			return new ScreenshotDto
 			{
+				Id = screenshot.Id,
 				Url = screenshot.Url,
 			};
 		}
@@ -106,6 +112,7 @@ namespace Horudom.Helpers
 
 			return new PosterDto
 			{
+				Id = poster.Id,
 				Url = poster.Url,
 			};
 		}
