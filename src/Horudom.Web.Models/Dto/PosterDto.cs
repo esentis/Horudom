@@ -4,6 +4,8 @@ namespace Horudom.Dto
 
 	public class PosterDto
 	{
+		public long Id { get; set; }
+
 		public Uri Url { get; set; }
 	}
 }
