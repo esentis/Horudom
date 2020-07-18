@@ -10,8 +10,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Esentis.Horudom.Persistence.Migrations
 {
     [DbContext(typeof(HorudomContext))]
-    [Migration("20200718164134_initial migration")]
-    partial class initialmigration
+    [Migration("20200718173411_Initial migrations")]
+    partial class Initialmigrations
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -32,8 +32,8 @@ namespace Esentis.Horudom.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("BirthDate")
-                        .HasColumnType("timestamp without time zone");
+                    b.Property<DateTimeOffset>("BirthDate")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
@@ -59,9 +59,8 @@ namespace Esentis.Horudom.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("BirthDate")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<DateTimeOffset>("BirthDate")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
@@ -110,8 +109,8 @@ namespace Esentis.Horudom.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("ReleaseDate")
-                        .HasColumnType("timestamp without time zone");
+                    b.Property<DateTimeOffset>("ReleaseDate")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -167,36 +166,6 @@ namespace Esentis.Horudom.Persistence.Migrations
                     b.ToTable("MovieGenres");
                 });
 
-            modelBuilder.Entity("Horudom.Models.MoviePoster", b =>
-                {
-                    b.Property<long>("MovieId")
-                        .HasColumnType("bigint");
-
-                    b.Property<int>("PosterId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("MovieId", "PosterId");
-
-                    b.HasIndex("PosterId");
-
-                    b.ToTable("MoviePosters");
-                });
-
-            modelBuilder.Entity("Horudom.Models.MovieScreenshot", b =>
-                {
-                    b.Property<long>("MovieId")
-                        .HasColumnType("bigint");
-
-                    b.Property<int>("ScreenshotId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("MovieId", "ScreenshotId");
-
-                    b.HasIndex("ScreenshotId");
-
-                    b.ToTable("MovieScreenshots");
-                });
-
             modelBuilder.Entity("Horudom.Models.MovieWriter", b =>
                 {
                     b.Property<long>("MovieId")
@@ -219,11 +188,16 @@ namespace Esentis.Horudom.Persistence.Migrations
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
+                    b.Property<long>("MovieId")
+                        .HasColumnType("bigint");
+
                     b.Property<string>("Url")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("MovieId");
 
                     b.ToTable("Posters");
                 });
@@ -235,11 +209,16 @@ namespace Esentis.Horudom.Persistence.Migrations
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
+                    b.Property<long>("MovieId")
+                        .HasColumnType("bigint");
+
                     b.Property<string>("Url")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("MovieId");
 
                     b.ToTable("Screenshots");
                 });
@@ -255,9 +234,8 @@ namespace Esentis.Horudom.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("BirthDate")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<DateTimeOffset>("BirthDate")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
@@ -317,36 +295,6 @@ namespace Esentis.Horudom.Persistence.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Horudom.Models.MoviePoster", b =>
-                {
-                    b.HasOne("Horudom.Models.Movie", "Movie")
-                        .WithMany()
-                        .HasForeignKey("MovieId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("Horudom.Models.Poster", "Poster")
-                        .WithMany()
-                        .HasForeignKey("PosterId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Horudom.Models.MovieScreenshot", b =>
-                {
-                    b.HasOne("Horudom.Models.Movie", "Movie")
-                        .WithMany()
-                        .HasForeignKey("MovieId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("Horudom.Models.Screenshot", "Screenshot")
-                        .WithMany()
-                        .HasForeignKey("ScreenshotId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Horudom.Models.MovieWriter", b =>
                 {
                     b.HasOne("Horudom.Models.Movie", "Movie")
@@ -358,6 +306,24 @@ namespace Esentis.Horudom.Persistence.Migrations
                     b.HasOne("Horudom.Models.Writer", "Writer")
                         .WithMany()
                         .HasForeignKey("WriterId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Horudom.Models.Poster", b =>
+                {
+                    b.HasOne("Horudom.Models.Movie", "Movie")
+                        .WithMany()
+                        .HasForeignKey("MovieId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Horudom.Models.Screenshot", b =>
+                {
+                    b.HasOne("Horudom.Models.Movie", "Movie")
+                        .WithMany()
+                        .HasForeignKey("MovieId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
