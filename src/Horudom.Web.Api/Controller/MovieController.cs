@@ -1,43 +1,40 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Threading.Tasks;
-
-using Horudom.Data;
-using Horudom.Dto;
-using Horudom.Helpers;
-
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-
 namespace Horudom.Controller
 {
+	using System.Collections.Generic;
+	using System.Linq;
+	using System.Threading.Tasks;
+
+	using Horudom.Data;
+	using Horudom.Dto;
+	using Horudom.Helpers;
+
+	using Microsoft.AspNetCore.Mvc;
+	using Microsoft.EntityFrameworkCore;
+
 	[Route("api/movie")]
 	[ApiController]
 	public class MovieController : ControllerBase
 	{
-		private readonly HorudomContext _ctx;
+		private readonly HorudomContext context;
 
 		public MovieController(HorudomContext ctx)
 		{
-			_ctx = ctx;
+			context = ctx;
 		}
 
 		[HttpGet("")]
 		public async Task<ActionResult<List<MovieDto>>> GetMovies()
 		{
-			var movies = _ctx.Movies;
+			var movies = context.Movies;
 
-			var result = movies.Select(x => x.ToDto()).ToList();
+			var result = await movies.Select(x => x.ToDto()).ToListAsync();
 			return Ok(result);
 		}
 
 		[HttpGet("{title}")]
 		public async Task<ActionResult<List<MovieDto>>> GetMoviesByTitle(string title)
 		{
-			var movies = await _ctx.Movies.Where(x => x.Title.ToLower().Contains(title.ToLower())).ToListAsync();
+			var movies = await context.Movies.Where(x => x.Title.ToLower().Contains(title.ToLower())).ToListAsync();
 			if (movies == null)
 			{
 				return NotFound("Movie " + title + " not found");
@@ -50,7 +47,7 @@ namespace Horudom.Controller
 		[HttpGet("{actor}")]
 		public async Task<ActionResult<List<MovieDto>>> GetMoviesByActor(string actor)
 		{
-			var moviesByActor = await _ctx.MovieActors
+			var moviesByActor = await context.MovieActors
 				.Include(x => x.Movie)
 				.Include(x => x.Actor)
 				.Where(x => x.Actor.FirstName == actor)
@@ -60,6 +57,5 @@ namespace Horudom.Controller
 			var realMoviesByActor = moviesByActor.Select(x => x.ToDto()).ToList();
 			return Ok(realMoviesByActor);
 		}
-
 	}
 }
