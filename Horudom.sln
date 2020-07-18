@@ -11,7 +11,18 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Horudom.Web.Api", "src\Horu
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Horudom.Persistence", "src\Horudom.Persistence\Horudom.Persistence.csproj", "{7ACB1EFA-EF0D-4793-9C3C-08CDD0F2AF01}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Horudom.Web.Models", "src\Horudom.Web.Models\Horudom.Web.Models.csproj", "{BE11B255-21D4-4421-B4EB-E2B24BA85ACA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Horudom.Web.Models", "src\Horudom.Web.Models\Horudom.Web.Models.csproj", "{BE11B255-21D4-4421-B4EB-E2B24BA85ACA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Configuration", "Configuration", "{6DEC095C-9C76-4862-8A49-2E900425DD06}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		.gitignore = .gitignore
+		Directory.Build.props = Directory.Build.props
+		Directory.Build.targets = Directory.Build.targets
+		dotnet.ruleset = dotnet.ruleset
+		GitVersion.yml = GitVersion.yml
+		gulpfile.js = gulpfile.js
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
