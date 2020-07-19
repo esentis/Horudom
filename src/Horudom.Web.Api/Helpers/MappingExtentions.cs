@@ -35,9 +35,9 @@ namespace Horudom.Helpers
 			{
 				Id = actor.Id,
 				Firstname = actor.Firstname,
+				Lastname = actor.Lastname,
 				Bio = actor.Bio,
 				BirthDate = actor.BirthDate,
-				Lastname = actor.Lastname,
 			};
 		}
 
@@ -68,10 +68,10 @@ namespace Horudom.Helpers
 			return new WriterDto
 			{
 				Id = writer.Id,
-				Firstname = writer.FirstName,
+				Firstname = writer.Firstname,
+				Lastname = writer.Lastname,
 				Bio = writer.Bio,
 				BirthDate = writer.BirthDate,
-				Lastname = writer.LastName,
 			};
 		}
 

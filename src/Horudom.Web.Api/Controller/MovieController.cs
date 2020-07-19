@@ -34,7 +34,8 @@ namespace Horudom.Controller
 		[HttpGet("{title}")]
 		public async Task<ActionResult<List<MovieDto>>> GetMoviesByTitle(string title)
 		{
-			var movies = await context.Movies.Where(x => x.Title.NormalizeSearch().Contains(title.ToLower())).ToListAsync();
+			var NormalizedTitle = title.NormalizeSearch();
+			var movies = await context.Movies.Where(x => x.NormalizedTitle.Contains(NormalizedTitle)).ToListAsync();
 			if (movies == null)
 			{
 				return NotFound("Movie " + title + " not found");
@@ -47,10 +48,11 @@ namespace Horudom.Controller
 		[HttpGet("{actor}")]
 		public async Task<ActionResult<List<MovieDto>>> GetMoviesByActor(string actor)
 		{
+			var NormalizedActor = actor.NormalizeSearch();
 			var moviesByActor = await context.MovieActors
 				.Include(x => x.Movie)
 				.Include(x => x.Actor)
-				.Where(x => x.Actor.NormalizedFirstname.Equals(actor.NormalizeSearch()) || x.Actor.NormalizedLastname.Equals(actor.NormalizeSearch()))
+				.Where(x => x.Actor.NormalizedFirstname.Equals(NormalizedActor) || x.Actor.NormalizedLastname.Equals(NormalizedActor))
 				.Select(x => x.Movie)
 				.ToListAsync();
 
