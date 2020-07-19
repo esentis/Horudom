@@ -4,10 +4,10 @@ namespace Horudom.Controller
 	using System.Linq;
 	using System.Threading.Tasks;
 
+	using Esentis.Horudom.Web.Api.Helpers;
 	using Horudom.Data;
 	using Horudom.Dto;
 	using Horudom.Helpers;
-
 	using Microsoft.AspNetCore.Mvc;
 	using Microsoft.EntityFrameworkCore;
 
@@ -34,7 +34,7 @@ namespace Horudom.Controller
 		[HttpGet("{title}")]
 		public async Task<ActionResult<List<MovieDto>>> GetMoviesByTitle(string title)
 		{
-			var movies = await context.Movies.Where(x => x.Title.ToLower().Contains(title.ToLower())).ToListAsync();
+			var movies = await context.Movies.Where(x => x.Title.NormalizeSearch().Contains(title.ToLower())).ToListAsync();
 			if (movies == null)
 			{
 				return NotFound("Movie " + title + " not found");
@@ -50,7 +50,7 @@ namespace Horudom.Controller
 			var moviesByActor = await context.MovieActors
 				.Include(x => x.Movie)
 				.Include(x => x.Actor)
-				.Where(x => x.Actor.FirstName == actor)
+				.Where(x => x.Actor.NormalizedFirstname.Equals(actor.NormalizeSearch()) || x.Actor.NormalizedLastname.Equals(actor.NormalizeSearch()))
 				.Select(x => x.Movie)
 				.ToListAsync();
 
