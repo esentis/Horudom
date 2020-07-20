@@ -26,6 +26,7 @@ namespace Horudom
 			services.AddControllers();
 			services.AddDbContext<HorudomContext>(options =>
 			options.UseNpgsql(Configuration.GetConnectionString("Movies")));
+			services.AddSwaggerGen();
 		}
 
 		public void Configure(IApplicationBuilder app)
@@ -34,6 +35,13 @@ namespace Horudom
 			{
 				app.UseDeveloperExceptionPage();
 			}
+
+			app.UseSwagger();
+
+			app.UseSwaggerUI(c =>
+			{
+				c.SwaggerEndpoint("/swagger/v1/swagger.json", "Horudom API V1");
+			});
 
 			app.UseHttpsRedirection();
 
