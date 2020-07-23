@@ -15,16 +15,14 @@ namespace Horudom.Dto
 
 		public DateTimeOffset ReleaseDate { get; set; }
 
-		public List<DirectorDto> Directors { get; set; }
+		public List<long> ActorIds { get; set; }
 
-		public List<ActorDto> Actors { get; set; }
+		public List<long> DirectorIds { get; set; }
 
-		public List<GenreDto> Genres { get; set; }
+		public List<long> GenreIds { get; set; }
 
-		public List<PosterDto> Posters { get; set; }
+		public List<long> WriterIds { get; set; }
 
-		public List<ScreenshotDto> Screenshots { get; set; }
-
-		public List<WriterDto> Writers { get; set; }
+		public List<long> PosterIds { get; set; }
 	}
 }
