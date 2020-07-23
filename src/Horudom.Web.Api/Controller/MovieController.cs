@@ -44,20 +44,5 @@ namespace Horudom.Controller
 			var result = movies.Select(x => x.ToDto()).ToList();
 			return Ok(result);
 		}
-
-		[HttpGet("{actor}")]
-		public async Task<ActionResult<List<MovieDto>>> GetMoviesByActor(string actor)
-		{
-			var normalizedActor = actor.NormalizeSearch();
-			var moviesByActor = await context.MovieActors
-				.Include(x => x.Movie)
-				.Include(x => x.Actor)
-				.Where(x => x.Actor.NormalizedFirstname.Equals(normalizedActor) || x.Actor.NormalizedLastname.Equals(normalizedActor))
-				.Select(x => x.Movie)
-				.ToListAsync();
-
-			var realMoviesByActor = moviesByActor.Select(x => x.ToDto()).ToList();
-			return Ok(realMoviesByActor);
-		}
 	}
 }
