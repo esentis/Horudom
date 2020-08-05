@@ -116,5 +116,22 @@ namespace Horudom.Helpers
 				Url = poster.Url,
 			};
 		}
+
+		public static Movie FromDto(this AddMovieDto addMovieDto)
+		{
+			if (addMovieDto == null)
+			{
+				throw new ArgumentNullException(nameof(addMovieDto));
+			}
+
+			return new Movie
+			{
+				CountryOrigin = addMovieDto.CountryOrigin,
+				Duration = addMovieDto.Duration,
+				Plot = addMovieDto.Plot,
+				ReleaseDate = addMovieDto.ReleaseDate,
+				Title = addMovieDto.Title,
+			};
+		}
 	}
 }

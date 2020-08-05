@@ -8,6 +8,8 @@ namespace Horudom.Controller
 	using Horudom.Data;
 	using Horudom.Dto;
 	using Horudom.Helpers;
+	using Horudom.Models;
+
 	using Microsoft.AspNetCore.Mvc;
 	using Microsoft.EntityFrameworkCore;
 
@@ -29,6 +31,26 @@ namespace Horudom.Controller
 
 			var result = await movies.Select(x => x.ToDto()).ToListAsync();
 			return Ok(result);
+		}
+
+		[HttpPost("")]
+		public async Task<ActionResult<MovieDto>> AddMovie([FromBody] AddMovieDto movieToAdd)
+		{
+			var movie = movieToAdd.FromDto();
+
+			var actorIds = movieToAdd.ActorIds.Distinct().OrderBy(x => x).ToList();
+			var actors = await context.Actors.Where(x => actorIds.Contains(x.Id)).ToListAsync();
+			var missingActors = actorIds.Except(actors.Select(a => a.Id)).ToList();
+			if (missingActors.Count != 0)
+			{
+				return NotFound($"Could not find actors with ids {string.Join(", ", missingActors)}");
+			}
+
+			var movieActors = actors.Select(x => new MovieActor { Actor = x, Movie = movie }).ToList();
+			context.MovieActors.AddRange(movieActors);
+			context.Movies.Add(movie);
+			await context.SaveChangesAsync();
+			return Ok(movie.ToDto());
 		}
 
 		[HttpGet("{title}")]
