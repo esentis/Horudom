@@ -133,5 +133,21 @@ namespace Horudom.Helpers
 				Title = addMovieDto.Title,
 			};
 		}
+
+		public static Actor FromDto(this ActorDto addActorDto)
+		{
+			if (addActorDto == null)
+			{
+				throw new ArgumentNullException(nameof(addActorDto));
+			}
+
+			return new Actor
+			{
+				Bio = addActorDto.Bio,
+				BirthDate = addActorDto.BirthDate,
+				Firstname = addActorDto.Firstname,
+				Lastname = addActorDto.Lastname,
+			};
+		}
 	}
 }

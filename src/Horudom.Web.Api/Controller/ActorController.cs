@@ -2,6 +2,7 @@ namespace Esentis.Horudom.Web.Api.Controller
 {
 	using System.Collections.Generic;
 	using System.Linq;
+	using System.Runtime.InteropServices.ComTypes;
 	using System.Threading.Tasks;
 
 	using Esentis.Horudom.Web.Api.Helpers;
@@ -46,5 +47,14 @@ namespace Esentis.Horudom.Web.Api.Controller
 			var movieDtos = moviesByActor.Select(x => x.ToDto()).ToList();
 			return Ok(movieDtos);
 		}
+
+		[HttpPost("")]
+		public async Task AddActor([FromForm]ActorDto actor)
+		{
+			var actorToAdd = actor.FromDto();
+			context.Actors.Add(actorToAdd);
+			await context.SaveChangesAsync();
+		}
+
 	}
 }
