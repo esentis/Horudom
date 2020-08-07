@@ -21,6 +21,7 @@ namespace Horudom.Helpers
 				Duration = movie.Duration,
 				Plot = movie.Plot,
 				ReleaseDate = movie.ReleaseDate,
+				CountryOrigin = movie.CountryOrigin,
 			};
 		}
 
