@@ -43,6 +43,7 @@ namespace Horudom
 				c.SwaggerEndpoint("/swagger/v1/swagger.json", "Horudom API V1");
 			});
 
+			// For production. Flutter cant recognize local certificate
 			app.UseHttpsRedirection();
 
 			app.UseRouting();
