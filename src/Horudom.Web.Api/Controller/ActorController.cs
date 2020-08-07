@@ -37,6 +37,11 @@ namespace Esentis.Horudom.Web.Api.Controller
 		{
 			var actor = context.Actors.Where(x => x.Id == id).SingleOrDefault();
 
+			if (actor == null)
+			{
+				return NotFound($"No {nameof(Actor)} with Id {id} found in database");
+			}
+
 			return Ok(actor.ToDto());
 		}
 
@@ -51,7 +56,7 @@ namespace Esentis.Horudom.Web.Api.Controller
 			}
 
 			var moviesByActor = await context.MovieActors
-				.Where(x => x.Actor.Id == id)
+				.Where(x => x.Actor.Id == actor.Id)
 				.Select(x => x.Movie)
 				.ToListAsync();
 			var movieDtos = moviesByActor.Select(x => x.ToDto()).ToList();
