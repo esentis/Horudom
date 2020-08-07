@@ -33,7 +33,7 @@ namespace Esentis.Horudom.Web.Api.Controller
 		}
 
 		[HttpGet("{id}")]
-		public async Task<ActionResult<List<ActorDto>>> GetActor(long id)
+		public ActionResult<ActorDto> GetActor(long id)
 		{
 			var actor = context.Actors.Where(x => x.Id == id).SingleOrDefault();
 
@@ -43,7 +43,7 @@ namespace Esentis.Horudom.Web.Api.Controller
 		[HttpGet("{id}/movies")]
 		public async Task<ActionResult<List<MovieDto>>> GetMoviesByActor(long id)
 		{
-			var actor = context.Actors.Where(x => x.Id == id).SingleOrDefault();
+			var actor = context.Actors.Where(x => x.Id == id).SingleOrDefaultAsync();
 
 			if (actor == null)
 			{
