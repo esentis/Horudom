@@ -33,7 +33,15 @@ namespace Esentis.Horudom.Web.Api.Controller
 		}
 
 		[HttpGet("{id}")]
-		public async Task<ActionResult<List<MovieDto>>> GetMoviesByActor(int id)
+		public async Task<ActionResult<List<ActorDto>>> GetActor(long id)
+		{
+			var actor = context.Actors.Where(x => x.Id == id).SingleOrDefault();
+
+			return Ok(actor.ToDto());
+		}
+
+		[HttpGet("{id}/movies")]
+		public async Task<ActionResult<List<MovieDto>>> GetMoviesByActor(long id)
 		{
 			var actor = context.Actors.Where(x => x.Id == id).SingleOrDefault();
 
@@ -45,7 +53,7 @@ namespace Esentis.Horudom.Web.Api.Controller
 			var moviesByActor = await context.MovieActors
 				.Include(x => x.Movie)
 				.Include(x => x.Actor)
-				.Where(x => x.Actor == actor)
+				.Where(x => x.Actor.Id == actor.Id)
 				.Select(x => x.Movie)
 				.ToListAsync();
 			var movieDtos = moviesByActor.Select(x => x.ToDto()).ToList();
@@ -53,12 +61,12 @@ namespace Esentis.Horudom.Web.Api.Controller
 		}
 
 		[HttpPost("")]
-		public async Task<ActionResult<ActorDto>> AddActor([FromForm] ActorDto actor)
+		public async Task<ActionResult<ActorDto>> AddActor([FromForm] ActorDto actorDto)
 		{
-			var actorToAdd = actor.FromDto();
-			context.Actors.Add(actorToAdd);
+			var actor = actorDto.FromDto();
+			context.Actors.Add(actor);
 			await context.SaveChangesAsync();
-			return Ok(actor);
+			return CreatedAtAction(nameof(GetActor), new { id = actor.Id }, actor.ToDto());
 		}
 
 		[HttpDelete("")]
@@ -69,12 +77,10 @@ namespace Esentis.Horudom.Web.Api.Controller
 			{
 				return NotFound("No actor found in the database");
 			}
-			else
-			{
-				context.Actors.Remove(actor);
-				await context.SaveChangesAsync();
-				return NoContent();
-			}
+
+			context.Actors.Remove(actor);
+			await context.SaveChangesAsync();
+			return NoContent();
 		}
 
 		[HttpPut("{id}")]
