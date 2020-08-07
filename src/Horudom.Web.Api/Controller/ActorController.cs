@@ -4,11 +4,10 @@ namespace Esentis.Horudom.Web.Api.Controller
 	using System.Linq;
 	using System.Threading.Tasks;
 
-	using Esentis.Horudom.Web.Api.Helpers;
-
 	using global::Horudom.Data;
 	using global::Horudom.Dto;
 	using global::Horudom.Helpers;
+	using global::Horudom.Models;
 
 	using Microsoft.AspNetCore.Mvc;
 	using Microsoft.EntityFrameworkCore;
@@ -33,18 +32,75 @@ namespace Esentis.Horudom.Web.Api.Controller
 			return Ok(result);
 		}
 
-		[HttpGet("{actor}")]
-		public async Task<ActionResult<List<MovieDto>>> GetMoviesByActor(string actor)
+		[HttpGet("{id}")]
+		public ActionResult<ActorDto> GetActor(long id)
 		{
-			var normalizedActor = actor.NormalizeSearch();
+			var actor = context.Actors.Where(x => x.Id == id).SingleOrDefault();
+
+			if (actor == null)
+			{
+				return NotFound($"No {nameof(Actor)} with Id {id} found in database");
+			}
+
+			return Ok(actor.ToDto());
+		}
+
+		[HttpGet("{id}/movies")]
+		public async Task<ActionResult<List<MovieDto>>> GetMoviesByActor(long id)
+		{
+			var actor = await context.Actors.Where(x => x.Id == id).SingleOrDefaultAsync();
+
+			if (actor == null)
+			{
+				return NotFound($"No {nameof(Actor)} with Id {id} found in database");
+			}
+
 			var moviesByActor = await context.MovieActors
-				.Include(x => x.Movie)
-				.Include(x => x.Actor)
-				.Where(x => x.Actor.NormalizedFirstname.Equals(normalizedActor) || x.Actor.NormalizedLastname.Equals(normalizedActor))
+				.Where(x => x.Actor.Id == actor.Id)
 				.Select(x => x.Movie)
 				.ToListAsync();
 			var movieDtos = moviesByActor.Select(x => x.ToDto()).ToList();
 			return Ok(movieDtos);
+		}
+
+		[HttpPost("")]
+		public async Task<ActionResult<ActorDto>> AddActor([FromForm] ActorDto actorDto)
+		{
+			var actor = actorDto.FromDto();
+			context.Actors.Add(actor);
+			await context.SaveChangesAsync();
+			return CreatedAtAction(nameof(GetActor), new { id = actor.Id }, actor.ToDto());
+		}
+
+		[HttpDelete("")]
+		public async Task<ActionResult> DeleteActor(int idToDelete)
+		{
+			var actor = context.Actors.Where(x => x.Id == idToDelete).SingleOrDefault();
+			if (actor == null)
+			{
+				return NotFound("No actor found in the database");
+			}
+
+			context.Actors.Remove(actor);
+			await context.SaveChangesAsync();
+			return NoContent();
+		}
+
+		[HttpPut("{id}")]
+		public async Task<ActionResult<ActorDto>> UpdateActor(int id, ActorDto actorDto)
+		{
+			var actor = context.Actors.Where(x => x.Id == id).SingleOrDefault();
+			if (actor == null)
+			{
+				return NotFound($"No {nameof(Actor)} with Id {id} found in database");
+			}
+
+			actor.Firstname = actorDto.Firstname;
+			actor.Bio = actorDto.Bio;
+			actor.BirthDate = actorDto.BirthDate;
+			actor.Lastname = actorDto.Lastname;
+			await context.SaveChangesAsync();
+			return Ok(actor.ToDto());
 		}
 	}
 }

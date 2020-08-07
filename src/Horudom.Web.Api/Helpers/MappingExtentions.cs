@@ -21,6 +21,7 @@ namespace Horudom.Helpers
 				Duration = movie.Duration,
 				Plot = movie.Plot,
 				ReleaseDate = movie.ReleaseDate,
+				CountryOrigin = movie.CountryOrigin,
 			};
 		}
 
@@ -131,6 +132,22 @@ namespace Horudom.Helpers
 				Plot = addMovieDto.Plot,
 				ReleaseDate = addMovieDto.ReleaseDate,
 				Title = addMovieDto.Title,
+			};
+		}
+
+		public static Actor FromDto(this ActorDto addActorDto)
+		{
+			if (addActorDto == null)
+			{
+				throw new ArgumentNullException(nameof(addActorDto));
+			}
+
+			return new Actor
+			{
+				Bio = addActorDto.Bio,
+				BirthDate = addActorDto.BirthDate,
+				Firstname = addActorDto.Firstname,
+				Lastname = addActorDto.Lastname,
 			};
 		}
 	}
