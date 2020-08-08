@@ -12,22 +12,21 @@ namespace Horudom.Controller
 
 	using Microsoft.AspNetCore.Mvc;
 	using Microsoft.EntityFrameworkCore;
+	using Microsoft.Extensions.Logging;
 
 	[Route("api/movie")]
 	[ApiController]
-	public class MovieController : ControllerBase
+	public class MovieController : BaseController<MovieController>
 	{
-		private readonly HorudomContext context;
-
-		public MovieController(HorudomContext ctx)
+		public MovieController(HorudomContext ctx, ILogger<MovieController> logger)
+			: base(ctx, logger)
 		{
-			context = ctx;
 		}
 
 		[HttpGet("")]
 		public async Task<ActionResult<List<MovieDto>>> GetMovies()
 		{
-			var movies = context.Movies;
+			var movies = Context.Movies;
 
 			var result = await movies.Select(x => x.ToDto()).ToListAsync();
 			return Ok(result);
@@ -41,9 +40,9 @@ namespace Horudom.Controller
 			var actorIds = movieToAdd.ActorIds.Distinct().OrderBy(x => x).ToList();
 			var directorIds = movieToAdd.DirectorIds.Distinct().OrderBy(x => x).ToList();
 			var writerIds = movieToAdd.WriterIds.Distinct().OrderBy(x => x).ToList();
-			var actors = await context.Actors.Where(x => actorIds.Contains(x.Id)).ToListAsync();
-			var directors = await context.Directors.Where(x => directorIds.Contains(x.Id)).ToListAsync();
-			var writers = await context.Writers.Where(x => writerIds.Contains(x.Id)).ToListAsync();
+			var actors = await Context.Actors.Where(x => actorIds.Contains(x.Id)).ToListAsync();
+			var directors = await Context.Directors.Where(x => directorIds.Contains(x.Id)).ToListAsync();
+			var writers = await Context.Writers.Where(x => writerIds.Contains(x.Id)).ToListAsync();
 			var missingDirectors = directorIds.Except(directors.Select(a => a.Id)).ToList();
 			var missingActors = actorIds.Except(actors.Select(a => a.Id)).ToList();
 			var missingWriters = writerIds.Except(actors.Select(a => a.Id)).ToList();
@@ -66,11 +65,11 @@ namespace Horudom.Controller
 			var movieActors = actors.Select(x => new MovieActor { Actor = x, Movie = movie }).ToList();
 			var movieDirectors = directors.Select(x => new MovieDirector { Director = x, Movie = movie }).ToList();
 			var movieWriters = writers.Select(x => new MovieWriter { Writer = x, Movie = movie }).ToList();
-			context.MovieActors.AddRange(movieActors);
-			context.MovieDirectors.AddRange(movieDirectors);
-			context.MovieWriters.AddRange(movieWriters);
-			context.Movies.Add(movie);
-			await context.SaveChangesAsync();
+			Context.MovieActors.AddRange(movieActors);
+			Context.MovieDirectors.AddRange(movieDirectors);
+			Context.MovieWriters.AddRange(movieWriters);
+			Context.Movies.Add(movie);
+			await Context.SaveChangesAsync();
 			return Ok(movie.ToDto());
 		}
 
@@ -78,7 +77,7 @@ namespace Horudom.Controller
 		public async Task<ActionResult<List<MovieDto>>> GetMoviesByTitle(string title)
 		{
 			var normalizedTitle = title.NormalizeSearch();
-			var movies = await context.Movies.Where(x => x.NormalizedTitle.Contains(normalizedTitle)).ToListAsync();
+			var movies = await Context.Movies.Where(x => x.NormalizedTitle.Contains(normalizedTitle)).ToListAsync();
 			if (movies == null)
 			{
 				return NotFound("Movie " + title + " not found");
