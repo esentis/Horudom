@@ -121,6 +121,7 @@ namespace Esentis.Horudom.Web.Api.Controller
 		///     }
 		///
 		/// </remarks>
+		/// <param name="directorDto"></param>
 		/// <returns>Returns the newly created director.</returns>
 		/// <response code="201">Returns the new director.</response>
 		[HttpPost("")]
@@ -177,6 +178,7 @@ namespace Esentis.Horudom.Web.Api.Controller
 		///     }
 		///
 		/// </remarks>
+		/// <param name="directorDto"></param>
 		/// <returns>Returns the updated director.</returns>
 		/// <response code="201">The updated director.</response>
 		/// <response code="404">If there was no director found to delete.</response>
