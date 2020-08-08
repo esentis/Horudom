@@ -11,6 +11,8 @@ namespace Esentis.Horudom.Web.Api.Controller
 	using global::Horudom.Helpers;
 	using global::Horudom.Models;
 
+	using Kritikos.StructuredLogging.Templates;
+
 	using Microsoft.AspNetCore.Mvc;
 	using Microsoft.EntityFrameworkCore;
 	using Microsoft.Extensions.Logging;
@@ -38,6 +40,7 @@ namespace Esentis.Horudom.Web.Api.Controller
 
 			if (director == null)
 			{
+				Logger.LogWarning(AspNetCoreLogTemplates.EntityNotFound, nameof(Director), id);
 				return NotFound($"No {nameof(Director)} with Id {id} found in database");
 			}
 
