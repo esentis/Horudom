@@ -150,5 +150,21 @@ namespace Horudom.Helpers
 				Lastname = addActorDto.Lastname,
 			};
 		}
+
+		public static Director FromDto(this DirectorDto addDirectorDto)
+		{
+			if (addDirectorDto == null)
+			{
+				throw new ArgumentNullException(nameof(addDirectorDto));
+			}
+
+			return new Director
+			{
+				Bio = addDirectorDto.Bio,
+				BirthDate = addDirectorDto.BirthDate,
+				Firstname = addDirectorDto.Firstname,
+				Lastname = addDirectorDto.Lastname,
+			};
+		}
 	}
 }
