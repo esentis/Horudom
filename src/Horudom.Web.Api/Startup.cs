@@ -27,12 +27,12 @@ namespace Horudom
 			services.AddControllers();
 			services.AddDbContext<HorudomContext>(options =>
 			options.UseNpgsql(Configuration.GetConnectionString("Movies")));
-			services.AddSwaggerGen(c => {
+			services.AddSwaggerGen(c =>
+			{
 				c.SwaggerDoc("v1", new OpenApiInfo { Title = "Horudom Api", Version = "v1" });
 
 				var filePath = Path.Combine(AppContext.BaseDirectory, $"{typeof(Startup).Assembly.GetName().Name}.xml");
 				c.IncludeXmlComments(filePath);
-				/*c.EnableAnnotations();*/
 				c.DescribeAllParametersInCamelCase();
 			});
 		}
