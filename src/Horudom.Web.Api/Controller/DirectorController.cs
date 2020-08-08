@@ -17,6 +17,8 @@ namespace Esentis.Horudom.Web.Api.Controller
 	using Microsoft.EntityFrameworkCore;
 	using Microsoft.Extensions.Logging;
 
+	using Serilog;
+
 	[Route("api/director")]
 	[ApiController]
 	public class DirectorController : BaseController<DirectorController>
@@ -34,9 +36,9 @@ namespace Esentis.Horudom.Web.Api.Controller
 		}
 
 		[HttpGet("{id}")]
-		public ActionResult<DirectorDto> GetDirector(long id)
+		public async Task<ActionResult<DirectorDto>> GetDirector(long id)
 		{
-			var director = Context.Directors.Where(x => x.Id == id).SingleOrDefault();
+			var director = await Context.Directors.Where(x => x.Id == id).SingleOrDefaultAsync();
 
 			if (director == null)
 			{
@@ -71,6 +73,7 @@ namespace Esentis.Horudom.Web.Api.Controller
 			var director = directorDto.FromDto();
 			Context.Directors.Add(director);
 			await Context.SaveChangesAsync();
+			Logger.LogInformation(HorudomLogTemplates.CreatedEntity, nameof(Director), director);
 			return CreatedAtAction(nameof(GetDirector), new { id = director.Id }, director.ToDto());
 		}
 
