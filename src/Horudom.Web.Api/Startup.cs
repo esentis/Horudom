@@ -26,7 +26,7 @@ namespace Horudom
 		{
 			services.AddControllers();
 			services.AddDbContext<HorudomContext>(options =>
-			options.UseNpgsql(Configuration.GetConnectionString("Movies")));
+				options.UseNpgsql(Configuration.GetConnectionString("Movies")));
 			services.AddSwaggerGen(c =>
 			{
 				c.SwaggerDoc("v1", new OpenApiInfo { Title = "Horudom Api", Version = "v1" });
