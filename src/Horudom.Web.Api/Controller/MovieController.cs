@@ -39,15 +39,36 @@ namespace Horudom.Controller
 			var movie = movieToAdd.FromDto();
 
 			var actorIds = movieToAdd.ActorIds.Distinct().OrderBy(x => x).ToList();
+			var directorIds = movieToAdd.DirectorIds.Distinct().OrderBy(x => x).ToList();
+			var writerIds = movieToAdd.WriterIds.Distinct().OrderBy(x => x).ToList();
 			var actors = await context.Actors.Where(x => actorIds.Contains(x.Id)).ToListAsync();
+			var directors = await context.Directors.Where(x => directorIds.Contains(x.Id)).ToListAsync();
+			var writers = await context.Writers.Where(x => writerIds.Contains(x.Id)).ToListAsync();
+			var missingDirectors = directorIds.Except(directors.Select(a => a.Id)).ToList();
 			var missingActors = actorIds.Except(actors.Select(a => a.Id)).ToList();
+			var missingWriters = writerIds.Except(actors.Select(a => a.Id)).ToList();
+
 			if (missingActors.Count != 0)
 			{
 				return NotFound($"Could not find actors with ids {string.Join(", ", missingActors)}");
 			}
 
+			if (missingDirectors.Count != 0)
+			{
+				return NotFound($"Could not find directors with ids {string.Join(", ", missingDirectors)}");
+			}
+
+			if (missingWriters.Count != 0)
+			{
+				return NotFound($"Could not find writers with ids {string.Join(", ", missingWriters)}");
+			}
+
 			var movieActors = actors.Select(x => new MovieActor { Actor = x, Movie = movie }).ToList();
+			var movieDirectors = directors.Select(x => new MovieDirector { Director = x, Movie = movie }).ToList();
+			var movieWriters = writers.Select(x => new MovieWriter { Writer = x, Movie = movie }).ToList();
 			context.MovieActors.AddRange(movieActors);
+			context.MovieDirectors.AddRange(movieDirectors);
+			context.MovieWriters.AddRange(movieWriters);
 			context.Movies.Add(movie);
 			await context.SaveChangesAsync();
 			return Ok(movie.ToDto());

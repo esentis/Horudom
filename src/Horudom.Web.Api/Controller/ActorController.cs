@@ -26,9 +26,7 @@ namespace Esentis.Horudom.Web.Api.Controller
 		[HttpGet("")]
 		public async Task<ActionResult<List<ActorDto>>> GetActors()
 		{
-			var actors = context.Actors;
-
-			var result = await actors.Select(x => x.ToDto()).ToListAsync();
+			var result = await context.Actors.Select(x => x.ToDto()).ToListAsync();
 			return Ok(result);
 		}
 
