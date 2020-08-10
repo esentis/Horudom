@@ -100,6 +100,11 @@ namespace Esentis.Horudom.Web.Api.Controller
 		[HttpPut("{id}")]
 		public async Task<ActionResult<DirectorDto>> UpdateDirector(int id, DirectorDto directorDto)
 		{
+			if (directorDto == null)
+			{
+				return BadRequest("No director provided to update");
+			}
+
 			var director = Context.Directors.Where(x => x.Id == id).SingleOrDefault();
 			if (director == null)
 			{
