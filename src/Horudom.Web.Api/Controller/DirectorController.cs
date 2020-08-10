@@ -114,5 +114,4 @@ namespace Esentis.Horudom.Web.Api.Controller
 			return Ok(director.ToDto());
 		}
 	}
-
 }

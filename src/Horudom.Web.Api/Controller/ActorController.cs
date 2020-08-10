@@ -36,7 +36,9 @@ namespace Esentis.Horudom.Web.Api.Controller
 		{
 			var actor = Context.Actors.Where(x => x.Id == id).SingleOrDefault();
 
+#pragma warning disable IDE0046 // Waiting for the new C# version
 			if (actor == null)
+#pragma warning restore IDE0046 // Convert to conditional expression
 			{
 				return NotFound($"No {nameof(Actor)} with Id {id} found in database");
 			}

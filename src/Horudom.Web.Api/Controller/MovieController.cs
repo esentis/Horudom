@@ -77,7 +77,9 @@ namespace Horudom.Controller
 		public async Task<ActionResult<List<MovieDto>>> GetMoviesByTitle(string title)
 		{
 			var normalizedTitle = title.NormalizeSearch();
+#pragma warning disable CA1307 // I think this is a false alarm
 			var movies = await Context.Movies.Where(x => x.NormalizedTitle.Contains(normalizedTitle)).ToListAsync();
+#pragma warning restore CA1307 // Specify StringComparison
 			if (movies == null)
 			{
 				return NotFound("Movie " + title + " not found");

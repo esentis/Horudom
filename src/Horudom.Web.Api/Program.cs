@@ -27,7 +27,11 @@ namespace Horudom
 	public static class Program
 	{
 		private static readonly string ApplicationName =
+#pragma warning disable CS8602 // Can't be nulled.
+#pragma warning disable CS8601 // Possible null reference assignment.
 			Assembly.GetAssembly(typeof(Program)).GetName().Name;
+#pragma warning restore CS8601 // Possible null reference assignment.
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
 
 		private static readonly LoggingLevelSwitch LevelSwitch = new LoggingLevelSwitch();
 
@@ -55,9 +59,9 @@ namespace Horudom
 
 				await host.RunAsync();
 			}
-			catch (InvalidOperationException e)
+			catch (InvalidOperationException)
 			{
-				Log.Fatal("Could not apply migrations");
+				Log.Fatal("Could not apply migrations ");
 			}
 #pragma warning disable CA1031 // Unhandled exception, application terminated
 			catch (Exception e)
