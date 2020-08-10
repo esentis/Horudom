@@ -32,6 +32,7 @@ namespace Esentis.Horudom.Web.Api.Controller
 		public async Task<ActionResult<List<DirectorDto>>> GetDirectors()
 		{
 			var result = await Context.Directors.Select(x => x.ToDto()).ToListAsync();
+			Logger.LogInformation(HorudomLogTemplates.FoundEntities, nameof(Director), result);
 			return Ok(result);
 		}
 
@@ -46,7 +47,9 @@ namespace Esentis.Horudom.Web.Api.Controller
 				return NotFound($"No {nameof(Director)} with Id {id} found in database");
 			}
 
-			return Ok(director.ToDto());
+			var directorDto = director.ToDto();
+			Logger.LogInformation(HorudomLogTemplates.FoundEntity, nameof(Director), director);
+			return Ok(directorDto);
 		}
 
 		[HttpGet("{id}/movies")]
@@ -56,6 +59,7 @@ namespace Esentis.Horudom.Web.Api.Controller
 
 			if (director == null)
 			{
+				Logger.LogWarning(AspNetCoreLogTemplates.EntityNotFound, nameof(Director), id);
 				return NotFound($"No {nameof(Director)} with Id {id} found in database");
 			}
 
@@ -64,6 +68,7 @@ namespace Esentis.Horudom.Web.Api.Controller
 				.Select(x => x.Movie)
 				.ToListAsync();
 			var movieDtos = moviesByDirector.Select(x => x.ToDto()).ToList();
+			Logger.LogInformation(HorudomLogTemplates.FoundEntities, nameof(Movie), movieDtos);
 			return Ok(movieDtos);
 		}
 
@@ -83,16 +88,19 @@ namespace Esentis.Horudom.Web.Api.Controller
 			var director = await Context.Directors.Where(x => x.Id == id).SingleOrDefaultAsync();
 			if (director == null)
 			{
+				Logger.LogWarning(AspNetCoreLogTemplates.EntityNotFound, nameof(Director), id);
 				return NotFound("No director found in the database");
 			}
 
 			var foundMovie = await Context.MovieDirectors.Where(x => x.Director.Id == director.Id).AnyAsync();
 			if (foundMovie)
 			{
+				Logger.LogWarning(HorudomLogTemplates.Conflict, nameof(Director), id);
 				return Conflict($"{nameof(Director)} has movies assigned");
 			}
 
 			Context.Directors.Remove(director);
+			Logger.LogInformation(HorudomLogTemplates.Deleted, nameof(Director), id);
 			await Context.SaveChangesAsync();
 			return NoContent();
 		}
@@ -102,12 +110,14 @@ namespace Esentis.Horudom.Web.Api.Controller
 		{
 			if (directorDto == null)
 			{
+				Logger.LogWarning(HorudomLogTemplates.IsNull, nameof(DirectorDto));
 				return BadRequest("No director provided to update");
 			}
 
 			var director = Context.Directors.Where(x => x.Id == id).SingleOrDefault();
 			if (director == null)
 			{
+				Logger.LogWarning(AspNetCoreLogTemplates.EntityNotFound, nameof(Director), id);
 				return NotFound($"No {nameof(Director)} with Id {id} found in database");
 			}
 
@@ -116,6 +126,7 @@ namespace Esentis.Horudom.Web.Api.Controller
 			director.BirthDate = directorDto.BirthDate;
 			director.Lastname = directorDto.Lastname;
 			await Context.SaveChangesAsync();
+			Logger.LogInformation(HorudomLogTemplates.Updated, nameof(Director), director);
 			return Ok(director.ToDto());
 		}
 	}

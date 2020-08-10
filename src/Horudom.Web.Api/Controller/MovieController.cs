@@ -10,6 +10,8 @@ namespace Horudom.Controller
 	using Horudom.Helpers;
 	using Horudom.Models;
 
+	using Kritikos.StructuredLogging.Templates;
+
 	using Microsoft.AspNetCore.Mvc;
 	using Microsoft.EntityFrameworkCore;
 	using Microsoft.Extensions.Logging;
@@ -29,6 +31,7 @@ namespace Horudom.Controller
 			var movies = Context.Movies;
 
 			var result = await movies.Select(x => x.ToDto()).ToListAsync();
+			Logger.LogInformation(HorudomLogTemplates.FoundEntities, nameof(Movie), result);
 			return Ok(result);
 		}
 
@@ -49,16 +52,19 @@ namespace Horudom.Controller
 
 			if (missingActors.Count != 0)
 			{
+				Logger.LogWarning(AspNetCoreLogTemplates.EntityNotFound, nameof(Actor), missingActors);
 				return NotFound($"Could not find actors with ids {string.Join(", ", missingActors)}");
 			}
 
 			if (missingDirectors.Count != 0)
 			{
+				Logger.LogWarning(AspNetCoreLogTemplates.EntityNotFound, nameof(Director), missingDirectors);
 				return NotFound($"Could not find directors with ids {string.Join(", ", missingDirectors)}");
 			}
 
 			if (missingWriters.Count != 0)
 			{
+				Logger.LogWarning(AspNetCoreLogTemplates.EntityNotFound, nameof(Writer), missingWriters);
 				return NotFound($"Could not find writers with ids {string.Join(", ", missingWriters)}");
 			}
 
@@ -70,6 +76,7 @@ namespace Horudom.Controller
 			Context.MovieWriters.AddRange(movieWriters);
 			Context.Movies.Add(movie);
 			await Context.SaveChangesAsync();
+			Logger.LogInformation(HorudomLogTemplates.CreatedEntity, nameof(Movie), movie);
 			return Ok(movie.ToDto());
 		}
 
@@ -86,6 +93,7 @@ namespace Horudom.Controller
 			}
 
 			var result = movies.Select(x => x.ToDto()).ToList();
+			Logger.LogInformation(HorudomLogTemplates.FoundEntities, nameof(Movie), result);
 			return Ok(result);
 		}
 	}

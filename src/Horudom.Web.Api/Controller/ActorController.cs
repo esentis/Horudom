@@ -11,6 +11,8 @@ namespace Esentis.Horudom.Web.Api.Controller
 	using global::Horudom.Helpers;
 	using global::Horudom.Models;
 
+	using Kritikos.StructuredLogging.Templates;
+
 	using Microsoft.AspNetCore.Mvc;
 	using Microsoft.EntityFrameworkCore;
 	using Microsoft.Extensions.Logging;
@@ -28,6 +30,7 @@ namespace Esentis.Horudom.Web.Api.Controller
 		public async Task<ActionResult<List<ActorDto>>> GetActors()
 		{
 			var result = await Context.Actors.Select(x => x.ToDto()).ToListAsync();
+			Logger.LogInformation(HorudomLogTemplates.FoundEntities, nameof(Actor), result);
 			return Ok(result);
 		}
 
@@ -40,9 +43,11 @@ namespace Esentis.Horudom.Web.Api.Controller
 			if (actor == null)
 #pragma warning restore IDE0046 // Convert to conditional expression
 			{
+				Logger.LogWarning(AspNetCoreLogTemplates.EntityNotFound, nameof(Actor), id);
 				return NotFound($"No {nameof(Actor)} with Id {id} found in database");
 			}
 
+			Logger.LogInformation(HorudomLogTemplates.FoundEntity, nameof(Actor), actor);
 			return Ok(actor.ToDto());
 		}
 
@@ -53,6 +58,7 @@ namespace Esentis.Horudom.Web.Api.Controller
 
 			if (actor == null)
 			{
+				Logger.LogWarning(AspNetCoreLogTemplates.EntityNotFound, nameof(Actor), id);
 				return NotFound($"No {nameof(Actor)} with Id {id} found in database");
 			}
 
@@ -61,6 +67,7 @@ namespace Esentis.Horudom.Web.Api.Controller
 				.Select(x => x.Movie)
 				.ToListAsync();
 			var movieDtos = moviesByActor.Select(x => x.ToDto()).ToList();
+			Logger.LogInformation(HorudomLogTemplates.FoundEntities, nameof(Movie), movieDtos);
 			return Ok(movieDtos);
 		}
 
@@ -70,20 +77,23 @@ namespace Esentis.Horudom.Web.Api.Controller
 			var actor = actorDto.FromDto();
 			Context.Actors.Add(actor);
 			await Context.SaveChangesAsync();
+			Logger.LogInformation(HorudomLogTemplates.CreatedEntity, nameof(Actor), actor);
 			return CreatedAtAction(nameof(GetActor), new { id = actor.Id }, actor.ToDto());
 		}
 
 		[HttpDelete("")]
-		public async Task<ActionResult> DeleteActor(int idToDelete)
+		public async Task<ActionResult> DeleteActor(int id)
 		{
-			var actor = Context.Actors.Where(x => x.Id == idToDelete).SingleOrDefault();
+			var actor = Context.Actors.Where(x => x.Id == id).SingleOrDefault();
 			if (actor == null)
 			{
+				Logger.LogWarning(AspNetCoreLogTemplates.EntityNotFound, nameof(Actor), id);
 				return NotFound("No actor found in the database");
 			}
 
 			Context.Actors.Remove(actor);
 			await Context.SaveChangesAsync();
+			Logger.LogInformation(HorudomLogTemplates.Deleted, nameof(Actor), id);
 			return NoContent();
 		}
 
@@ -92,12 +102,14 @@ namespace Esentis.Horudom.Web.Api.Controller
 		{
 			if (actorDto == null)
 			{
+				Logger.LogWarning(HorudomLogTemplates.IsNull, nameof(actorDto));
 				return BadRequest("No actor provided to update");
 			}
 
 			var actor = Context.Actors.Where(x => x.Id == id).SingleOrDefault();
 			if (actor == null)
 			{
+				Logger.LogWarning(AspNetCoreLogTemplates.EntityNotFound, nameof(Actor), id);
 				return NotFound($"No {nameof(Actor)} with Id {id} found in database");
 			}
 
@@ -106,6 +118,7 @@ namespace Esentis.Horudom.Web.Api.Controller
 			actor.BirthDate = actorDto.BirthDate;
 			actor.Lastname = actorDto.Lastname;
 			await Context.SaveChangesAsync();
+			Logger.LogInformation(HorudomLogTemplates.Updated, nameof(Actor), actor);
 			return Ok(actor.ToDto());
 		}
 	}
