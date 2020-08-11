@@ -4,14 +4,14 @@ namespace Esentis.Horudom.Web.Api.Helpers
 	{
 		public const string CreatedEntity = "Created {Entity} {@Value}";
 
-		public const string FoundEntity = "Found {Entity} {@Value}";
+		public const string RequestEntity = "User requested {Entity} with ID {Id}";
 
-		public const string FoundEntities = "List of {Entity}s : {@Value}";
+		public const string RequestEntities = "User requested list of {Entity}s";
 
 		public const string Conflict = "{Entity} with {Id} has assignments";
 
 		public const string Deleted = "{Entity} with {Id} has been deleted";
 
-		public const string Updated = "{Entity} has been updated to {@NewEntity}";
+		public const string Updated = "{Entity} has been updated";
 	}
 }
