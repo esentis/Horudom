@@ -8,9 +8,9 @@ namespace Esentis.Horudom.Web.Api.Helpers
 
 		public const string FoundEntities = "List of {Entity}s : {@Value}";
 
-		public const string Conflict = "{Entity} with {id} has assignments";
+		public const string Conflict = "{Entity} with {Id} has assignments";
 
-		public const string Deleted = "{Entity} with {id} has been deleted";
+		public const string Deleted = "{Entity} with {Id} has been deleted";
 
 		public const string IsNull = "{Entity} is null";
 
