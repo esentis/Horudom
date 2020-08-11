@@ -30,7 +30,7 @@ namespace Esentis.Horudom.Web.Api.Controller
 		public async Task<ActionResult<List<ActorDto>>> GetActors()
 		{
 			var result = await Context.Actors.Select(x => x.ToDto()).ToListAsync();
-			Logger.LogInformation(HorudomLogTemplates.FoundEntities, nameof(Actor), result);
+			Logger.LogInformation(HorudomLogTemplates.RequestEntities, nameof(Actor));
 			return Ok(result);
 		}
 
@@ -47,7 +47,7 @@ namespace Esentis.Horudom.Web.Api.Controller
 				return NotFound($"No {nameof(Actor)} with Id {id} found in database");
 			}
 
-			Logger.LogInformation(HorudomLogTemplates.FoundEntity, nameof(Actor), actor);
+			Logger.LogInformation(HorudomLogTemplates.RequestEntity, nameof(Actor), actor);
 			return Ok(actor.ToDto());
 		}
 
@@ -67,7 +67,7 @@ namespace Esentis.Horudom.Web.Api.Controller
 				.Select(x => x.Movie)
 				.ToListAsync();
 			var movieDtos = moviesByActor.Select(x => x.ToDto()).ToList();
-			Logger.LogInformation(HorudomLogTemplates.FoundEntities, nameof(Movie), movieDtos);
+			Logger.LogInformation(HorudomLogTemplates.RequestEntities, nameof(Movie));
 			return Ok(movieDtos);
 		}
 
