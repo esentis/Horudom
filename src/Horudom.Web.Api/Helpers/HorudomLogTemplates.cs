@@ -12,8 +12,6 @@ namespace Esentis.Horudom.Web.Api.Helpers
 
 		public const string Deleted = "{Entity} with {Id} has been deleted";
 
-		public const string IsNull = "{Entity} is null";
-
 		public const string Updated = "{Entity} has been updated to {@NewEntity}";
 
 	}
