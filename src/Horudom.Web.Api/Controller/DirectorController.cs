@@ -110,7 +110,7 @@ namespace Esentis.Horudom.Web.Api.Controller
 		{
 			if (directorDto == null)
 			{
-				Logger.LogWarning(HorudomLogTemplates.IsNull, nameof(DirectorDto));
+				Logger.LogWarning(AspNetCoreLogTemplates.EntityNotFound, nameof(DirectorDto), id);
 				return BadRequest("No director provided to update");
 			}
 

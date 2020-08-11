@@ -102,7 +102,7 @@ namespace Esentis.Horudom.Web.Api.Controller
 		{
 			if (actorDto == null)
 			{
-				Logger.LogWarning(HorudomLogTemplates.IsNull, nameof(actorDto));
+				Logger.LogWarning(AspNetCoreLogTemplates.EntityNotFound, nameof(ActorDto), id);
 				return BadRequest("No actor provided to update");
 			}
 
