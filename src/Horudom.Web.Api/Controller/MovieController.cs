@@ -10,26 +10,28 @@ namespace Horudom.Controller
 	using Horudom.Helpers;
 	using Horudom.Models;
 
+	using Kritikos.StructuredLogging.Templates;
+
 	using Microsoft.AspNetCore.Mvc;
 	using Microsoft.EntityFrameworkCore;
+	using Microsoft.Extensions.Logging;
 
 	[Route("api/movie")]
 	[ApiController]
-	public class MovieController : ControllerBase
+	public class MovieController : BaseController<MovieController>
 	{
-		private readonly HorudomContext context;
-
-		public MovieController(HorudomContext ctx)
+		public MovieController(HorudomContext ctx, ILogger<MovieController> logger)
+			: base(ctx, logger)
 		{
-			context = ctx;
 		}
 
 		[HttpGet("")]
 		public async Task<ActionResult<List<MovieDto>>> GetMovies()
 		{
-			var movies = context.Movies;
+			var movies = Context.Movies;
 
 			var result = await movies.Select(x => x.ToDto()).ToListAsync();
+			Logger.LogInformation(HorudomLogTemplates.RequestEntities, nameof(Movie), result.Count);
 			return Ok(result);
 		}
 
@@ -41,36 +43,40 @@ namespace Horudom.Controller
 			var actorIds = movieToAdd.ActorIds.Distinct().OrderBy(x => x).ToList();
 			var directorIds = movieToAdd.DirectorIds.Distinct().OrderBy(x => x).ToList();
 			var writerIds = movieToAdd.WriterIds.Distinct().OrderBy(x => x).ToList();
-			var actors = await context.Actors.Where(x => actorIds.Contains(x.Id)).ToListAsync();
-			var directors = await context.Directors.Where(x => directorIds.Contains(x.Id)).ToListAsync();
-			var writers = await context.Writers.Where(x => writerIds.Contains(x.Id)).ToListAsync();
+			var actors = await Context.Actors.Where(x => actorIds.Contains(x.Id)).ToListAsync();
+			var directors = await Context.Directors.Where(x => directorIds.Contains(x.Id)).ToListAsync();
+			var writers = await Context.Writers.Where(x => writerIds.Contains(x.Id)).ToListAsync();
 			var missingDirectors = directorIds.Except(directors.Select(a => a.Id)).ToList();
 			var missingActors = actorIds.Except(actors.Select(a => a.Id)).ToList();
 			var missingWriters = writerIds.Except(actors.Select(a => a.Id)).ToList();
 
 			if (missingActors.Count != 0)
 			{
+				Logger.LogWarning(AspNetCoreLogTemplates.EntityNotFound, nameof(Actor), missingActors);
 				return NotFound($"Could not find actors with ids {string.Join(", ", missingActors)}");
 			}
 
 			if (missingDirectors.Count != 0)
 			{
+				Logger.LogWarning(AspNetCoreLogTemplates.EntityNotFound, nameof(Director), missingDirectors);
 				return NotFound($"Could not find directors with ids {string.Join(", ", missingDirectors)}");
 			}
 
 			if (missingWriters.Count != 0)
 			{
+				Logger.LogWarning(AspNetCoreLogTemplates.EntityNotFound, nameof(Writer), missingWriters);
 				return NotFound($"Could not find writers with ids {string.Join(", ", missingWriters)}");
 			}
 
 			var movieActors = actors.Select(x => new MovieActor { Actor = x, Movie = movie }).ToList();
 			var movieDirectors = directors.Select(x => new MovieDirector { Director = x, Movie = movie }).ToList();
 			var movieWriters = writers.Select(x => new MovieWriter { Writer = x, Movie = movie }).ToList();
-			context.MovieActors.AddRange(movieActors);
-			context.MovieDirectors.AddRange(movieDirectors);
-			context.MovieWriters.AddRange(movieWriters);
-			context.Movies.Add(movie);
-			await context.SaveChangesAsync();
+			Context.MovieActors.AddRange(movieActors);
+			Context.MovieDirectors.AddRange(movieDirectors);
+			Context.MovieWriters.AddRange(movieWriters);
+			Context.Movies.Add(movie);
+			await Context.SaveChangesAsync();
+			Logger.LogInformation(HorudomLogTemplates.CreatedEntity, nameof(Movie), movie);
 			return Ok(movie.ToDto());
 		}
 
@@ -78,13 +84,16 @@ namespace Horudom.Controller
 		public async Task<ActionResult<List<MovieDto>>> GetMoviesByTitle(string title)
 		{
 			var normalizedTitle = title.NormalizeSearch();
-			var movies = await context.Movies.Where(x => x.NormalizedTitle.Contains(normalizedTitle)).ToListAsync();
+#pragma warning disable CA1307 // I think this is a false alarm
+			var movies = await Context.Movies.Where(x => x.NormalizedTitle.Contains(normalizedTitle)).ToListAsync();
+#pragma warning restore CA1307 // Specify StringComparison
 			if (movies == null)
 			{
 				return NotFound("Movie " + title + " not found");
 			}
 
 			var result = movies.Select(x => x.ToDto()).ToList();
+			Logger.LogInformation(HorudomLogTemplates.RequestEntities, nameof(Movie), result.Count);
 			return Ok(result);
 		}
 	}

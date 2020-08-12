@@ -1,8 +1,9 @@
 namespace Horudom
 {
-	using Horudom.Data;
 	using System;
 	using System.IO;
+
+	using Horudom.Data;
 	using Microsoft.AspNetCore.Builder;
 	using Microsoft.AspNetCore.Hosting;
 	using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ namespace Horudom
 	using Microsoft.Extensions.DependencyInjection;
 	using Microsoft.Extensions.Hosting;
 	using Microsoft.OpenApi.Models;
+
 	public class Startup
 	{
 		public Startup(IConfiguration configuration, IWebHostEnvironment env)
@@ -26,7 +28,7 @@ namespace Horudom
 		{
 			services.AddControllers();
 			services.AddDbContext<HorudomContext>(options =>
-			options.UseNpgsql(Configuration.GetConnectionString("Movies")));
+				options.UseNpgsql(Configuration.GetConnectionString("Movies")));
 			services.AddSwaggerGen(c =>
 			{
 				c.SwaggerDoc("v1", new OpenApiInfo { Title = "Horudom Api", Version = "v1" });
