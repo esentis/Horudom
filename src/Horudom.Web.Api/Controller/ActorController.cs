@@ -100,12 +100,6 @@ namespace Esentis.Horudom.Web.Api.Controller
 		[HttpPut("{id}")]
 		public async Task<ActionResult<ActorDto>> UpdateActor(int id, ActorDto actorDto)
 		{
-			if (actorDto == null)
-			{
-				Logger.LogWarning(AspNetCoreLogTemplates.EntityNotFound, nameof(ActorDto), id);
-				return BadRequest("No actor provided to update");
-			}
-
 			var actor = Context.Actors.Where(x => x.Id == id).SingleOrDefault();
 			if (actor == null)
 			{
