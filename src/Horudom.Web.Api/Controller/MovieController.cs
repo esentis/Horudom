@@ -31,7 +31,7 @@ namespace Horudom.Controller
 			var movies = Context.Movies;
 
 			var result = await movies.Select(x => x.ToDto()).ToListAsync();
-			Logger.LogInformation(HorudomLogTemplates.RequestEntities, nameof(Movie), result.Count);
+			Logger.LogInformation(HorudomLogTemplates.RequestEntities, nameof(Movie));
 			return Ok(result);
 		}
 
@@ -93,7 +93,7 @@ namespace Horudom.Controller
 			}
 
 			var result = movies.Select(x => x.ToDto()).ToList();
-			Logger.LogInformation(HorudomLogTemplates.RequestEntities, nameof(Movie), result.Count);
+			Logger.LogInformation(HorudomLogTemplates.RequestEntities, nameof(Movie));
 			return Ok(result);
 		}
 	}

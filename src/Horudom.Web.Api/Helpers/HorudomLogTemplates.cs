@@ -6,7 +6,7 @@ namespace Esentis.Horudom.Web.Api.Helpers
 
 		public const string RequestEntity = "User requested {Entity} with ID {Id}";
 
-		public const string RequestEntities = "User requested collection of {Entity}. Found {Count} records";
+		public const string RequestEntities = "User requested list of {Entity}s";
 
 		public const string Conflict = "{Entity} with {Id} has assignments";
 
