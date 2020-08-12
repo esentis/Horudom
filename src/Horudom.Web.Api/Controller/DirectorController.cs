@@ -32,7 +32,7 @@ namespace Esentis.Horudom.Web.Api.Controller
 		public async Task<ActionResult<List<DirectorDto>>> GetDirectors()
 		{
 			var result = await Context.Directors.Select(x => x.ToDto()).ToListAsync();
-			Logger.LogInformation(HorudomLogTemplates.RequestEntities, nameof(Director));
+			Logger.LogInformation(HorudomLogTemplates.RequestEntities, nameof(Director), result.Count);
 			return Ok(result);
 		}
 
@@ -48,7 +48,7 @@ namespace Esentis.Horudom.Web.Api.Controller
 			}
 
 			var directorDto = director.ToDto();
-			Logger.LogInformation(HorudomLogTemplates.RequestEntity, nameof(Director), director);
+			Logger.LogInformation(HorudomLogTemplates.RequestEntity, nameof(Director), id);
 			return Ok(directorDto);
 		}
 
@@ -68,7 +68,7 @@ namespace Esentis.Horudom.Web.Api.Controller
 				.Select(x => x.Movie)
 				.ToListAsync();
 			var movieDtos = moviesByDirector.Select(x => x.ToDto()).ToList();
-			Logger.LogInformation(HorudomLogTemplates.RequestEntities, nameof(Movie));
+			Logger.LogInformation(HorudomLogTemplates.RequestEntities, nameof(Movie), movieDtos.Count);
 			return Ok(movieDtos);
 		}
 
