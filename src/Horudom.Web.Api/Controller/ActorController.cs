@@ -47,7 +47,7 @@ namespace Esentis.Horudom.Web.Api.Controller
 				return NotFound($"No {nameof(Actor)} with Id {id} found in database");
 			}
 
-			Logger.LogInformation(HorudomLogTemplates.RequestEntity, nameof(Actor), actor);
+			Logger.LogInformation(HorudomLogTemplates.RequestEntity, nameof(Actor), id);
 			return Ok(actor.ToDto());
 		}
 
