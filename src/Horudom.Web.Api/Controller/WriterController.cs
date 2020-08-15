@@ -50,26 +50,6 @@ namespace Esentis.Horudom.Web.Api.Controller
 			return Ok(writerDto);
 		}
 
-		[HttpGet("{id}/movies")]
-		public async Task<ActionResult<List<MovieDto>>> GetMoviesByWriter(long id)
-		{
-			var writer = await Context.Writers.Where(x => x.Id == id).SingleOrDefaultAsync();
-
-			if (writer == null)
-			{
-				Logger.LogWarning(AspNetCoreLogTemplates.EntityNotFound, nameof(Writer), id);
-				return NotFound($"No {nameof(Writer)} with Id {id} found in database");
-			}
-
-			var moviesByWriter = await Context.MovieWriters
-				.Where(x => x.Writer.Id == writer.Id)
-				.Select(x => x.Movie)
-				.ToListAsync();
-			var movieDtos = moviesByWriter.Select(x => x.ToDto()).ToList();
-			Logger.LogInformation(HorudomLogTemplates.RequestEntities, nameof(Movie), movieDtos.Count);
-			return Ok(movieDtos);
-		}
-
 		[HttpPost("")]
 		public async Task<ActionResult<DirectorDto>> AddDirector(WriterDto writerDto)
 		{
