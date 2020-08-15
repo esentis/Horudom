@@ -51,7 +51,7 @@ namespace Esentis.Horudom.Web.Api.Controller
 		}
 
 		[HttpPost("")]
-		public async Task<ActionResult<DirectorDto>> AddDirector(WriterDto writerDto)
+		public async Task<ActionResult<WriterDto>> AddWriter(WriterDto writerDto)
 		{
 			var writer = writerDto.FromDto();
 			Context.Writers.Add(writer);
@@ -84,7 +84,7 @@ namespace Esentis.Horudom.Web.Api.Controller
 		}
 
 		[HttpPut("{id}")]
-		public async Task<ActionResult<DirectorDto>> UpdateWriter(int id, WriterDto writerDto)
+		public async Task<ActionResult<WriterDto>> UpdateWriter(int id, WriterDto writerDto)
 		{
 			var writer = Context.Writers.Where(x => x.Id == id).SingleOrDefault();
 			if (writer == null)
