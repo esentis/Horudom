@@ -135,64 +135,77 @@ namespace Horudom.Helpers
 			};
 		}
 
-		public static Actor FromDto(this ActorDto addActorDto)
+		public static Actor FromDto(this ActorDto actorDto)
 		{
-			if (addActorDto == null)
+			if (actorDto == null)
 			{
-				throw new ArgumentNullException(nameof(addActorDto));
+				throw new ArgumentNullException(nameof(actorDto));
 			}
 
 			return new Actor
 			{
-				Bio = addActorDto.Bio,
-				BirthDate = addActorDto.BirthDate,
-				Firstname = addActorDto.Firstname,
-				Lastname = addActorDto.Lastname,
+				Bio = actorDto.Bio,
+				BirthDate = actorDto.BirthDate,
+				Firstname = actorDto.Firstname,
+				Lastname = actorDto.Lastname,
 			};
 		}
 
-		public static Director FromDto(this DirectorDto addDirectorDto)
+		public static Director FromDto(this DirectorDto directorDto)
 		{
-			if (addDirectorDto == null)
+			if (directorDto == null)
 			{
-				throw new ArgumentNullException(nameof(addDirectorDto));
+				throw new ArgumentNullException(nameof(directorDto));
 			}
 
 			return new Director
 			{
-				Bio = addDirectorDto.Bio,
-				BirthDate = addDirectorDto.BirthDate,
-				Firstname = addDirectorDto.Firstname,
-				Lastname = addDirectorDto.Lastname,
+				Bio = directorDto.Bio,
+				BirthDate = directorDto.BirthDate,
+				Firstname = directorDto.Firstname,
+				Lastname = directorDto.Lastname,
 			};
 		}
 
-		public static Writer FromDto(this WriterDto addWriterDto)
+		public static Writer FromDto(this WriterDto writerDto)
 		{
-			if (addWriterDto == null)
+			if (writerDto == null)
 			{
-				throw new ArgumentNullException(nameof(addWriterDto));
+				throw new ArgumentNullException(nameof(writerDto));
 			}
 
 			return new Writer
 			{
-				Bio = addWriterDto.Bio,
-				BirthDate = addWriterDto.BirthDate,
-				Firstname = addWriterDto.Firstname,
-				Lastname = addWriterDto.Lastname,
+				Bio = writerDto.Bio,
+				BirthDate = writerDto.BirthDate,
+				Firstname = writerDto.Firstname,
+				Lastname = writerDto.Lastname,
 			};
 		}
 
-		public static Genre FromDto(this GenreDto addGenre)
+		public static Genre FromDto(this GenreDto genreDto)
 		{
-			if (addGenre == null)
+			if (genreDto == null)
 			{
-				throw new ArgumentNullException(nameof(addGenre));
+				throw new ArgumentNullException(nameof(genreDto));
 			}
 
 			return new Genre
 			{
-				 Name = addGenre.Name,
+				 Name = genreDto.Name,
+			};
+		}
+
+		public static Poster FromDto(this PosterDto posterDto)
+		{
+			if (posterDto == null)
+			{
+				throw new ArgumentNullException(nameof(posterDto));
+			}
+
+			return new Poster
+			{
+				Url = posterDto.Url,
 			};
 		}
 	}
