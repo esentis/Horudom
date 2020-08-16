@@ -2,6 +2,8 @@ namespace Horudom.Helpers
 {
 	using System;
 
+	using Esentis.Horudom.Web.Models.Dto;
+
 	using Horudom.Dto;
 	using Horudom.Models;
 
@@ -151,7 +153,39 @@ namespace Horudom.Helpers
 			};
 		}
 
+		public static Actor FromDto(this AddActorDto addActorDto)
+		{
+			if (addActorDto == null)
+			{
+				throw new ArgumentNullException(nameof(addActorDto));
+			}
+
+			return new Actor
+			{
+				Bio = addActorDto.Bio,
+				BirthDate = addActorDto.BirthDate,
+				Firstname = addActorDto.Firstname,
+				Lastname = addActorDto.Lastname,
+			};
+		}
+
 		public static Director FromDto(this DirectorDto directorDto)
+		{
+			if (directorDto == null)
+			{
+				throw new ArgumentNullException(nameof(directorDto));
+			}
+
+			return new Director
+			{
+				Bio = directorDto.Bio,
+				BirthDate = directorDto.BirthDate,
+				Firstname = directorDto.Firstname,
+				Lastname = directorDto.Lastname,
+			};
+		}
+
+		public static Director FromDto(this AddDirectorDto directorDto)
 		{
 			if (directorDto == null)
 			{
@@ -183,6 +217,22 @@ namespace Horudom.Helpers
 			};
 		}
 
+		public static Writer FromDto(this AddWriterDto addWriterDto)
+		{
+			if (addWriterDto == null)
+			{
+				throw new ArgumentNullException(nameof(addWriterDto));
+			}
+
+			return new Writer
+			{
+				Bio = addWriterDto.Bio,
+				BirthDate = addWriterDto.BirthDate,
+				Firstname = addWriterDto.Firstname,
+				Lastname = addWriterDto.Lastname,
+			};
+		}
+
 		public static Genre FromDto(this GenreDto genreDto)
 		{
 			if (genreDto == null)
@@ -196,6 +246,19 @@ namespace Horudom.Helpers
 			};
 		}
 
+		public static Genre FromDto(this AddGenreDto addGenreDto)
+		{
+			if (addGenreDto == null)
+			{
+				throw new ArgumentNullException(nameof(addGenreDto));
+			}
+
+			return new Genre
+			{
+				Name = addGenreDto.Name,
+			};
+		}
+
 		public static Poster FromDto(this PosterDto posterDto)
 		{
 			if (posterDto == null)
@@ -206,6 +269,34 @@ namespace Horudom.Helpers
 			return new Poster
 			{
 				Url = posterDto.Url,
+			};
+		}
+
+		public static Poster FromDto(this AddPosterDto addPosterDto, Movie movie)
+		{
+			if (addPosterDto == null)
+			{
+				throw new ArgumentNullException(nameof(addPosterDto));
+			}
+
+			return new Poster
+			{
+				Url = addPosterDto.Url,
+				Movie = movie,
+			};
+		}
+
+		public static Screenshot FromDto(this AddScreenshotDto addScreenshotDto, Movie movie)
+		{
+			if (addScreenshotDto == null)
+			{
+				throw new ArgumentNullException(nameof(addScreenshotDto));
+			}
+
+			return new Screenshot
+			{
+				Url = addScreenshotDto.Url,
+				Movie = movie,
 			};
 		}
 	}
