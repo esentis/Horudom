@@ -78,9 +78,11 @@ namespace Horudom.Controller
 			var movieActors = actors.Select(x => new MovieActor { Actor = x, Movie = movie }).ToList();
 			var movieDirectors = directors.Select(x => new MovieDirector { Director = x, Movie = movie }).ToList();
 			var movieWriters = writers.Select(x => new MovieWriter { Writer = x, Movie = movie }).ToList();
+			var movieGenres = genres.Select(x => new MovieGenre { Genre = x, Movie = movie }).ToList();
 			Context.MovieActors.AddRange(movieActors);
 			Context.MovieDirectors.AddRange(movieDirectors);
 			Context.MovieWriters.AddRange(movieWriters);
+			Context.MovieGenres.AddRange(movieGenres);
 			Context.Movies.Add(movie);
 			await Context.SaveChangesAsync();
 			Logger.LogInformation(HorudomLogTemplates.CreatedEntity, nameof(Movie), movie);
