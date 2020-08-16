@@ -10,15 +10,15 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Esentis.Horudom.Persistence.Migrations
 {
     [DbContext(typeof(HorudomContext))]
-    [Migration("20200719002932_Adds normalized fields")]
-    partial class Addsnormalizedfields
+    [Migration("20200815233244_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn)
-                .HasAnnotation("ProductVersion", "3.1.6")
+                .HasAnnotation("ProductVersion", "3.1.7")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             modelBuilder.Entity("Horudom.Models.Actor", b =>
@@ -195,8 +195,8 @@ namespace Esentis.Horudom.Persistence.Migrations
                     b.Property<long>("MovieId")
                         .HasColumnType("bigint");
 
-                    b.Property<int>("WriterId")
-                        .HasColumnType("integer");
+                    b.Property<long>("WriterId")
+                        .HasColumnType("bigint");
 
                     b.HasKey("MovieId", "WriterId");
 
@@ -249,9 +249,9 @@ namespace Esentis.Horudom.Persistence.Migrations
 
             modelBuilder.Entity("Horudom.Models.Writer", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
+                        .HasColumnType("bigint")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("Bio")
@@ -261,11 +261,19 @@ namespace Esentis.Horudom.Persistence.Migrations
                     b.Property<DateTimeOffset>("BirthDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("FirstName")
+                    b.Property<string>("Firstname")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("LastName")
+                    b.Property<string>("Lastname")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("NormalizedFirstname")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("NormalizedLastname")
                         .IsRequired()
                         .HasColumnType("text");
 

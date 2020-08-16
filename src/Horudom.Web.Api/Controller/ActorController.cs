@@ -47,28 +47,8 @@ namespace Esentis.Horudom.Web.Api.Controller
 				return NotFound($"No {nameof(Actor)} with Id {id} found in database");
 			}
 
-			Logger.LogInformation(HorudomLogTemplates.RequestEntity, nameof(Actor), actor);
+			Logger.LogInformation(HorudomLogTemplates.RequestEntity, nameof(Actor), id);
 			return Ok(actor.ToDto());
-		}
-
-		[HttpGet("{id}/movies")]
-		public async Task<ActionResult<List<MovieDto>>> GetMoviesByActor(long id)
-		{
-			var actor = await Context.Actors.Where(x => x.Id == id).SingleOrDefaultAsync();
-
-			if (actor == null)
-			{
-				Logger.LogWarning(AspNetCoreLogTemplates.EntityNotFound, nameof(Actor), id);
-				return NotFound($"No {nameof(Actor)} with Id {id} found in database");
-			}
-
-			var moviesByActor = await Context.MovieActors
-				.Where(x => x.Actor.Id == actor.Id)
-				.Select(x => x.Movie)
-				.ToListAsync();
-			var movieDtos = moviesByActor.Select(x => x.ToDto()).ToList();
-			Logger.LogInformation(HorudomLogTemplates.RequestEntities, nameof(Movie), movieDtos.Count);
-			return Ok(movieDtos);
 		}
 
 		[HttpPost("")]

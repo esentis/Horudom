@@ -166,5 +166,21 @@ namespace Horudom.Helpers
 				Lastname = addDirectorDto.Lastname,
 			};
 		}
+
+		public static Writer FromDto(this WriterDto addWriterDto)
+		{
+			if (addWriterDto == null)
+			{
+				throw new ArgumentNullException(nameof(addWriterDto));
+			}
+
+			return new Writer
+			{
+				Bio = addWriterDto.Bio,
+				BirthDate = addWriterDto.BirthDate,
+				Firstname = addWriterDto.Firstname,
+				Lastname = addWriterDto.Lastname,
+			};
+		}
 	}
 }

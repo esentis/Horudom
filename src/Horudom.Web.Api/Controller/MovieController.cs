@@ -96,5 +96,65 @@ namespace Horudom.Controller
 			Logger.LogInformation(HorudomLogTemplates.RequestEntities, nameof(Movie), result.Count);
 			return Ok(result);
 		}
+
+		[HttpGet("writer/{id}")]
+		public async Task<ActionResult<List<MovieDto>>> GetMoviesByWriter(long id)
+		{
+			var writer = await Context.Writers.Where(x => x.Id == id).SingleOrDefaultAsync();
+
+			if (writer == null)
+			{
+				Logger.LogWarning(AspNetCoreLogTemplates.EntityNotFound, nameof(Writer), id);
+				return NotFound($"No {nameof(Writer)} with Id {id} found in database");
+			}
+
+			var moviesByWriter = await Context.MovieWriters
+				.Where(x => x.Writer.Id == writer.Id)
+				.Select(x => x.Movie)
+				.ToListAsync();
+			var movieDtos = moviesByWriter.Select(x => x.ToDto()).ToList();
+			Logger.LogInformation(HorudomLogTemplates.RequestEntities, nameof(Movie), movieDtos.Count);
+			return Ok(movieDtos);
+		}
+
+		[HttpGet("director/{id}")]
+		public async Task<ActionResult<List<MovieDto>>> GetMoviesByDirector(long id)
+		{
+			var director = await Context.Directors.Where(x => x.Id == id).SingleOrDefaultAsync();
+
+			if (director == null)
+			{
+				Logger.LogWarning(AspNetCoreLogTemplates.EntityNotFound, nameof(Director), id);
+				return NotFound($"No {nameof(Director)} with Id {id} found in database");
+			}
+
+			var moviesByDirector = await Context.MovieDirectors
+				.Where(x => x.Director.Id == director.Id)
+				.Select(x => x.Movie)
+				.ToListAsync();
+			var movieDtos = moviesByDirector.Select(x => x.ToDto()).ToList();
+			Logger.LogInformation(HorudomLogTemplates.RequestEntities, nameof(Movie), movieDtos.Count);
+			return Ok(movieDtos);
+		}
+
+		[HttpGet("actor/{id}")]
+		public async Task<ActionResult<List<MovieDto>>> GetMoviesByActor(long id)
+		{
+			var actor = await Context.Actors.Where(x => x.Id == id).SingleOrDefaultAsync();
+
+			if (actor == null)
+			{
+				Logger.LogWarning(AspNetCoreLogTemplates.EntityNotFound, nameof(Actor), id);
+				return NotFound($"No {nameof(Actor)} with Id {id} found in database");
+			}
+
+			var moviesByActor = await Context.MovieActors
+				.Where(x => x.Actor.Id == actor.Id)
+				.Select(x => x.Movie)
+				.ToListAsync();
+			var movieDtos = moviesByActor.Select(x => x.ToDto()).ToList();
+			Logger.LogInformation(HorudomLogTemplates.RequestEntities, nameof(Movie), movieDtos.Count);
+			return Ok(movieDtos);
+		}
 	}
 }
