@@ -9,9 +9,7 @@ namespace Horudom.Controller
 	using Horudom.Dto;
 	using Horudom.Helpers;
 	using Horudom.Models;
-
 	using Kritikos.StructuredLogging.Templates;
-
 	using Microsoft.AspNetCore.Mvc;
 	using Microsoft.EntityFrameworkCore;
 	using Microsoft.Extensions.Logging;
@@ -43,12 +41,15 @@ namespace Horudom.Controller
 			var actorIds = movieToAdd.ActorIds.Distinct().OrderBy(x => x).ToList();
 			var directorIds = movieToAdd.DirectorIds.Distinct().OrderBy(x => x).ToList();
 			var writerIds = movieToAdd.WriterIds.Distinct().OrderBy(x => x).ToList();
+			var genreIds = movieToAdd.GenreIds.Distinct().OrderBy(x => x).ToList();
 			var actors = await Context.Actors.Where(x => actorIds.Contains(x.Id)).ToListAsync();
+			var genres = await Context.Genres.Where(x => genreIds.Contains(x.Id)).ToListAsync();
 			var directors = await Context.Directors.Where(x => directorIds.Contains(x.Id)).ToListAsync();
 			var writers = await Context.Writers.Where(x => writerIds.Contains(x.Id)).ToListAsync();
 			var missingDirectors = directorIds.Except(directors.Select(a => a.Id)).ToList();
 			var missingActors = actorIds.Except(actors.Select(a => a.Id)).ToList();
-			var missingWriters = writerIds.Except(actors.Select(a => a.Id)).ToList();
+			var missingGenres = genreIds.Except(genres.Select(a => a.Id)).ToList();
+			var missingWriters = writerIds.Except(writers.Select(a => a.Id)).ToList();
 
 			if (missingActors.Count != 0)
 			{
@@ -68,12 +69,20 @@ namespace Horudom.Controller
 				return NotFound($"Could not find writers with ids {string.Join(", ", missingWriters)}");
 			}
 
+			if (missingGenres.Count != 0)
+			{
+				Logger.LogWarning(AspNetCoreLogTemplates.EntityNotFound, nameof(Genre), missingGenres);
+				return NotFound($"Could not find genres with ids {string.Join(", ", missingGenres)}");
+			}
+
 			var movieActors = actors.Select(x => new MovieActor { Actor = x, Movie = movie }).ToList();
 			var movieDirectors = directors.Select(x => new MovieDirector { Director = x, Movie = movie }).ToList();
 			var movieWriters = writers.Select(x => new MovieWriter { Writer = x, Movie = movie }).ToList();
+			var movieGenres = genres.Select(x => new MovieGenre { Genre = x, Movie = movie }).ToList();
 			Context.MovieActors.AddRange(movieActors);
 			Context.MovieDirectors.AddRange(movieDirectors);
 			Context.MovieWriters.AddRange(movieWriters);
+			Context.MovieGenres.AddRange(movieGenres);
 			Context.Movies.Add(movie);
 			await Context.SaveChangesAsync();
 			Logger.LogInformation(HorudomLogTemplates.CreatedEntity, nameof(Movie), movie);

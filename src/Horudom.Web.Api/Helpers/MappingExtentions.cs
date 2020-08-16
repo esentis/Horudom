@@ -182,5 +182,18 @@ namespace Horudom.Helpers
 				Lastname = addWriterDto.Lastname,
 			};
 		}
+
+		public static Genre FromDto(this GenreDto addGenre)
+		{
+			if (addGenre == null)
+			{
+				throw new ArgumentNullException(nameof(addGenre));
+			}
+
+			return new Genre
+			{
+				 Name = addGenre.Name,
+			};
+		}
 	}
 }

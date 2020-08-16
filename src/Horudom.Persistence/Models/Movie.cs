@@ -36,7 +36,7 @@ namespace Horudom.Models
 			set
 			{
 				country = value;
-				NormalizedCountry = title.NormalizeSearch();
+				NormalizedCountry = country.NormalizeSearch();
 			}
 		}
 
