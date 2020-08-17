@@ -1,6 +1,8 @@
 namespace Horudom.Helpers
 {
 	using System;
+	using System.Runtime.CompilerServices;
+	using System.Runtime.InteropServices.ComTypes;
 
 	using Esentis.Horudom.Web.Models.Dto;
 
@@ -269,34 +271,6 @@ namespace Horudom.Helpers
 			return new Poster
 			{
 				Url = posterDto.Url,
-			};
-		}
-
-		public static Poster FromDto(this AddPosterDto addPosterDto, Movie movie)
-		{
-			if (addPosterDto == null)
-			{
-				throw new ArgumentNullException(nameof(addPosterDto));
-			}
-
-			return new Poster
-			{
-				Url = addPosterDto.Url,
-				Movie = movie,
-			};
-		}
-
-		public static Screenshot FromDto(this AddScreenshotDto addScreenshotDto, Movie movie)
-		{
-			if (addScreenshotDto == null)
-			{
-				throw new ArgumentNullException(nameof(addScreenshotDto));
-			}
-
-			return new Screenshot
-			{
-				Url = addScreenshotDto.Url,
-				Movie = movie,
 			};
 		}
 	}
