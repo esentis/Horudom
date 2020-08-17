@@ -28,16 +28,21 @@ namespace Esentis.Horudom.Web.Api.Controller
 		}
 
 		[HttpPost("")]
-		public async Task<ActionResult<ScreenshotDto>> AddScreenshot(AddScreenshotDto addScreenshotDto)
+		public async Task<ActionResult<ScreenshotDto>> AddScreenshot(AddScreenshotDto dto)
 		{
-			var movie = await Context.Movies.Where(x => x.Id == addScreenshotDto.MovieId).FirstOrDefaultAsync();
+			var movie = await Context.Movies.Where(x => x.Id == dto.MovieId).FirstOrDefaultAsync();
 			if (movie == null)
 			{
-				Logger.LogWarning(AspNetCoreLogTemplates.EntityNotFound, nameof(Movie), addScreenshotDto.MovieId);
-				return NotFound($"No {nameof(Movie)} with Id {addScreenshotDto.MovieId} found in database");
+				Logger.LogWarning(AspNetCoreLogTemplates.EntityNotFound, nameof(Movie), dto.MovieId);
+				return NotFound($"No {nameof(Movie)} with Id {dto.MovieId} found in database");
 			}
 
-			var screenshot = addScreenshotDto.FromDto(movie);
+			if (!Uri.TryCreate(dto.Uri, UriKind.Absolute, out var uri))
+			{
+				return BadRequest("Invalid Uri specified");
+			}
+
+			var screenshot = new Screenshot { Movie = movie, Url = uri };
 			Context.Screenshots.Add(screenshot);
 			await Context.SaveChangesAsync();
 			Logger.LogInformation(HorudomLogTemplates.CreatedEntity, nameof(Screenshot), screenshot);

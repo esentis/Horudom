@@ -28,16 +28,21 @@ namespace Esentis.Horudom.Web.Api.Controller
 		}
 
 		[HttpPost("")]
-		public async Task<ActionResult<PosterDto>> AddPoster(AddPosterDto addPosterDto)
+		public async Task<ActionResult<PosterDto>> AddPoster(AddPosterDto dto)
 		{
-			var movie = await Context.Movies.Where(x => x.Id == addPosterDto.MovieId).FirstOrDefaultAsync();
+			var movie = await Context.Movies.Where(x => x.Id == dto.MovieId).FirstOrDefaultAsync();
 			if (movie == null)
 			{
-				Logger.LogWarning(AspNetCoreLogTemplates.EntityNotFound, nameof(Movie), addPosterDto.MovieId);
-				return NotFound($"No {nameof(Movie)} with Id {addPosterDto.MovieId} found in database");
+				Logger.LogWarning(AspNetCoreLogTemplates.EntityNotFound, nameof(Movie), dto.MovieId);
+				return NotFound($"No {nameof(Movie)} with Id {dto.MovieId} found in database");
 			}
 
-			var poster = addPosterDto.FromDto(movie);
+			if (!Uri.TryCreate(dto.Uri, UriKind.Absolute, out var uri))
+			{
+				return BadRequest("Invalid Uri specified");
+			}
+
+			var poster = new Poster { Movie = movie, Url = uri };
 			Context.Posters.Add(poster);
 			await Context.SaveChangesAsync();
 			Logger.LogInformation(HorudomLogTemplates.CreatedEntity, nameof(Poster), poster);
@@ -55,9 +60,8 @@ namespace Esentis.Horudom.Web.Api.Controller
 				return NotFound($"No {nameof(Poster)} with Id {id} found in database");
 			}
 
-			var posterDto = poster.ToDto();
-			Logger.LogInformation(HorudomLogTemplates.RequestEntity, nameof(Poster), id);
-			return Ok(posterDto);
+			Logger.LogDebug(HorudomLogTemplates.RequestEntity, nameof(Poster), id);
+			return Ok(poster.ToDto());
 		}
 
 		[HttpPut("{id}")]
@@ -72,7 +76,7 @@ namespace Esentis.Horudom.Web.Api.Controller
 
 			poster.Url = url;
 			await Context.SaveChangesAsync();
-			Logger.LogInformation(HorudomLogTemplates.Updated, nameof(Poster), poster);
+			Logger.LogDebug(HorudomLogTemplates.Updated, nameof(Poster), poster);
 			return Ok(poster.ToDto());
 		}
 	}
