@@ -6,7 +6,7 @@ namespace Esentis.Horudom.Web.Models.Dto
 
 	public class AddScreenshotDto
 	{
-		public Uri Url { get; set; }
+		public string Uri { get; set; }
 
 		public long MovieId { get; set; }
 	}

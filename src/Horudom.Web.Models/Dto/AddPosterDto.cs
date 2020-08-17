@@ -4,7 +4,7 @@ namespace Esentis.Horudom.Web.Models.Dto
 
 	public class AddPosterDto
 	{
-		public Uri Url { get; set; }
+		public string Uri { get; set; }
 
 		public long MovieId { get; set; }
 	}
