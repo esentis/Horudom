@@ -25,6 +25,5 @@ namespace Horudom.Dto
 
 		public List<Uri> PosterUrls { get; set; }
 
-		public List<Uri> ScreenshotUrls { get; set; }
 	}
 }
