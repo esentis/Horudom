@@ -1,8 +1,6 @@
 namespace Horudom.Helpers
 {
 	using System;
-	using System.Runtime.CompilerServices;
-	using System.Runtime.InteropServices.ComTypes;
 
 	using Esentis.Horudom.Web.Models.Dto;
 
@@ -104,7 +102,7 @@ namespace Horudom.Helpers
 			return new ScreenshotDto
 			{
 				Id = screenshot.Id,
-				Url = screenshot.Url,
+				Url = screenshot.FilePath,
 			};
 		}
 
