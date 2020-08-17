@@ -6,6 +6,6 @@ namespace Horudom.Dto
 	{
 		public long Id { get; set; }
 
-		public Uri Url { get; set; }
+		public string Url { get; set; }
 	}
 }
