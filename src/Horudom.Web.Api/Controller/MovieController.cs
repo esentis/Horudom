@@ -44,10 +44,12 @@ namespace Horudom.Controller
 			var genreIds = addMovieDto.GenreIds.Distinct().OrderBy(x => x).ToList();
 			var posterUrls = addMovieDto.PosterUrls.Distinct().ToList();
 			var screenshotUrls = addMovieDto.ScreenshotUrls.Distinct().ToList();
+
 			var actors = await Context.Actors.Where(x => actorIds.Contains(x.Id)).ToListAsync();
 			var genres = await Context.Genres.Where(x => genreIds.Contains(x.Id)).ToListAsync();
 			var directors = await Context.Directors.Where(x => directorIds.Contains(x.Id)).ToListAsync();
 			var writers = await Context.Writers.Where(x => writerIds.Contains(x.Id)).ToListAsync();
+
 			var missingDirectors = directorIds.Except(directors.Select(a => a.Id)).ToList();
 			var missingActors = actorIds.Except(actors.Select(a => a.Id)).ToList();
 			var missingGenres = genreIds.Except(genres.Select(a => a.Id)).ToList();
