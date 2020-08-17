@@ -43,7 +43,6 @@ namespace Horudom.Controller
 			var writerIds = addMovieDto.WriterIds.Distinct().OrderBy(x => x).ToList();
 			var genreIds = addMovieDto.GenreIds.Distinct().OrderBy(x => x).ToList();
 			var posterUrls = addMovieDto.PosterUrls.Distinct().ToList();
-			var screenshotUrls = addMovieDto.ScreenshotUrls.Distinct().ToList();
 
 			var actors = await Context.Actors.Where(x => actorIds.Contains(x.Id)).ToListAsync();
 			var genres = await Context.Genres.Where(x => genreIds.Contains(x.Id)).ToListAsync();
@@ -84,13 +83,11 @@ namespace Horudom.Controller
 			var movieWriters = writers.Select(x => new MovieWriter { Writer = x, Movie = movie }).ToList();
 			var movieGenres = genres.Select(x => new MovieGenre { Genre = x, Movie = movie }).ToList();
 			var posters = posterUrls.Select(x => new Poster { Movie = movie, Url = x }).ToList();
-			var screenshots = screenshotUrls.Select(x => new Screenshot { Movie = movie, Url = x }).ToList();
 			Context.MovieActors.AddRange(movieActors);
 			Context.MovieDirectors.AddRange(movieDirectors);
 			Context.MovieWriters.AddRange(movieWriters);
 			Context.MovieGenres.AddRange(movieGenres);
 			Context.Posters.AddRange(posters);
-			Context.Screenshots.AddRange(screenshots);
 			Context.Movies.Add(movie);
 			await Context.SaveChangesAsync();
 			Logger.LogInformation(HorudomLogTemplates.CreatedEntity, nameof(Movie), movie);
