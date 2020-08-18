@@ -34,15 +34,15 @@ namespace Horudom.Controller
 		}
 
 		[HttpPost("")]
-		public async Task<ActionResult<MovieDto>> AddMovie([FromBody] AddMovieDto addMovieDto)
+		public async Task<ActionResult<MovieDto>> AddMovie([FromBody] AddMovieDto dto)
 		{
-			var movie = addMovieDto.FromDto();
+			var movie = dto.FromDto();
 
-			var actorIds = addMovieDto.ActorIds.Distinct().OrderBy(x => x).ToList();
-			var directorIds = addMovieDto.DirectorIds.Distinct().OrderBy(x => x).ToList();
-			var writerIds = addMovieDto.WriterIds.Distinct().OrderBy(x => x).ToList();
-			var genreIds = addMovieDto.GenreIds.Distinct().OrderBy(x => x).ToList();
-			var posterUrls = addMovieDto.PosterUrls.Distinct().ToList();
+			var actorIds = dto.ActorIds.Distinct().OrderBy(x => x).ToList();
+			var directorIds = dto.DirectorIds.Distinct().OrderBy(x => x).ToList();
+			var writerIds = dto.WriterIds.Distinct().OrderBy(x => x).ToList();
+			var genreIds = dto.GenreIds.Distinct().OrderBy(x => x).ToList();
+			var posterUrls = dto.PosterUrls.Distinct().ToList();
 
 			var actors = await Context.Actors.Where(x => actorIds.Contains(x.Id)).ToListAsync();
 			var genres = await Context.Genres.Where(x => genreIds.Contains(x.Id)).ToListAsync();

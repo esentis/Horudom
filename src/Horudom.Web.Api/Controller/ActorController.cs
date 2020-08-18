@@ -53,9 +53,9 @@ namespace Esentis.Horudom.Web.Api.Controller
 		}
 
 		[HttpPost("")]
-		public async Task<ActionResult<ActorDto>> AddActor(AddActorDto addActorDto)
+		public async Task<ActionResult<ActorDto>> AddActor(AddActorDto dto)
 		{
-			var actor = addActorDto.FromDto();
+			var actor = dto.FromDto();
 			Context.Actors.Add(actor);
 			await Context.SaveChangesAsync();
 			Logger.LogInformation(HorudomLogTemplates.CreatedEntity, nameof(Actor), actor);
@@ -79,7 +79,7 @@ namespace Esentis.Horudom.Web.Api.Controller
 		}
 
 		[HttpPut("{id}")]
-		public async Task<ActionResult<ActorDto>> UpdateActor(int id, AddActorDto addActorDto)
+		public async Task<ActionResult<ActorDto>> UpdateActor(int id, AddActorDto dto)
 		{
 			var actor = Context.Actors.Where(x => x.Id == id).SingleOrDefault();
 			if (actor == null)
@@ -88,10 +88,10 @@ namespace Esentis.Horudom.Web.Api.Controller
 				return NotFound($"No {nameof(Actor)} with Id {id} found in database");
 			}
 
-			actor.Firstname = addActorDto.Firstname;
-			actor.Bio = addActorDto.Bio;
-			actor.BirthDate = addActorDto.BirthDate;
-			actor.Lastname = addActorDto.Lastname;
+			actor.Firstname = dto.Firstname;
+			actor.Bio = dto.Bio;
+			actor.BirthDate = dto.BirthDate;
+			actor.Lastname = dto.Lastname;
 			await Context.SaveChangesAsync();
 			Logger.LogInformation(HorudomLogTemplates.Updated, nameof(Actor), actor);
 			return Ok(actor.ToDto());

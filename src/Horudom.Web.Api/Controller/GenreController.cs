@@ -52,9 +52,9 @@ namespace Esentis.Horudom.Web.Api.Controller
 		}
 
 		[HttpPost("")]
-		public async Task<ActionResult<GenreDto>> AddGenre(AddGenreDto addGenreDto)
+		public async Task<ActionResult<GenreDto>> AddGenre(AddGenreDto dto)
 		{
-			var genre = addGenreDto.FromDto();
+			var genre = dto.FromDto();
 			Context.Genres.Add(genre);
 			await Context.SaveChangesAsync();
 			Logger.LogInformation(HorudomLogTemplates.CreatedEntity, nameof(Genre), genre);
