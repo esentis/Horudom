@@ -3,8 +3,6 @@ namespace Esentis.Horudom.Web.Api.Controller
 	using System;
 	using System.IO;
 	using System.Linq;
-	using System.Reflection.Metadata;
-	using System.Security.Cryptography.X509Certificates;
 	using System.Threading.Tasks;
 
 	using Esentis.Horudom.Web.Api.Helpers;
@@ -20,7 +18,6 @@ namespace Esentis.Horudom.Web.Api.Controller
 	using Microsoft.AspNetCore.Http;
 	using Microsoft.AspNetCore.Mvc;
 	using Microsoft.EntityFrameworkCore;
-	using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
 	using Microsoft.Extensions.Logging;
 
 	[Route("api/screenshot")]
