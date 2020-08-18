@@ -125,7 +125,7 @@ namespace Esentis.Horudom.Web.Api.Controller
 		}
 
 		[HttpPut("{id}")]
-		public async Task<ActionResult<ScreenshotDto>> UpdateScreenshot(int id, Uri url)
+		public async Task<ActionResult<ScreenshotDto>> UpdateScreenshot(int id, IFormFile file)
 		{
 			var screenshot = Context.Screenshots.Where(x => x.Id == id).SingleOrDefault();
 			if (screenshot == null)
@@ -134,7 +134,20 @@ namespace Esentis.Horudom.Web.Api.Controller
 				return NotFound($"No {nameof(Screenshot)} with Id {id} found in database");
 			}
 
-			//screenshot.Url = url;
+			if (file.Length == 0)
+			{
+				return BadRequest("No screenshot provided");
+			}
+
+			var name = Guid.NewGuid().ToString("D");
+			var path = Path.Combine(Screenshots.FullName, $"{name}.{Path.GetExtension(file.FileName)}");
+
+			screenshot.FilePath = path;
+			using (var stream = System.IO.File.Create(path))
+			{
+				await file.CopyToAsync(stream);
+			}
+
 			await Context.SaveChangesAsync();
 			Logger.LogInformation(HorudomLogTemplates.Updated, nameof(Screenshot), screenshot);
 			return Ok(screenshot.ToDto());
