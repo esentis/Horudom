@@ -5,6 +5,7 @@ namespace Esentis.Horudom.Web.Api.Controller
 	using System.Threading.Tasks;
 
 	using Esentis.Horudom.Web.Api.Helpers;
+	using Esentis.Horudom.Web.Models.Dto;
 
 	using global::Horudom.Data;
 	using global::Horudom.Dto;
@@ -53,9 +54,9 @@ namespace Esentis.Horudom.Web.Api.Controller
 		}
 
 		[HttpPost("")]
-		public async Task<ActionResult<DirectorDto>> AddDirector(DirectorDto directorDto)
+		public async Task<ActionResult<DirectorDto>> AddDirector(AddDirectorDto dto)
 		{
-			var director = directorDto.FromDto();
+			var director = dto.FromDto();
 			Context.Directors.Add(director);
 			await Context.SaveChangesAsync();
 			Logger.LogInformation(HorudomLogTemplates.CreatedEntity, nameof(Director), director);
@@ -86,7 +87,7 @@ namespace Esentis.Horudom.Web.Api.Controller
 		}
 
 		[HttpPut("{id}")]
-		public async Task<ActionResult<DirectorDto>> UpdateDirector(int id, DirectorDto directorDto)
+		public async Task<ActionResult<DirectorDto>> UpdateDirector(int id, AddDirectorDto dto)
 		{
 			var director = Context.Directors.Where(x => x.Id == id).SingleOrDefault();
 			if (director == null)
@@ -95,10 +96,10 @@ namespace Esentis.Horudom.Web.Api.Controller
 				return NotFound($"No {nameof(Director)} with Id {id} found in database");
 			}
 
-			director.Firstname = directorDto.Firstname;
-			director.Bio = directorDto.Bio;
-			director.BirthDate = directorDto.BirthDate;
-			director.Lastname = directorDto.Lastname;
+			director.Firstname = dto.Firstname;
+			director.Bio = dto.Bio;
+			director.BirthDate = dto.BirthDate;
+			director.Lastname = dto.Lastname;
 			await Context.SaveChangesAsync();
 			Logger.LogInformation(HorudomLogTemplates.Updated, nameof(Director), director);
 			return Ok(director.ToDto());

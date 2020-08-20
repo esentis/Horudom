@@ -6,7 +6,7 @@ namespace Horudom.Models
 	{
 		public int Id { get; set; }
 
-		public Uri Url { get; set; }
+		public string FilePath { get; set; }
 
 		public Movie Movie { get; set; }
 	}

@@ -5,6 +5,7 @@ namespace Esentis.Horudom.Web.Api.Controller
 	using System.Threading.Tasks;
 
 	using Esentis.Horudom.Web.Api.Helpers;
+	using Esentis.Horudom.Web.Models.Dto;
 
 	using global::Horudom.Data;
 	using global::Horudom.Dto;
@@ -51,9 +52,9 @@ namespace Esentis.Horudom.Web.Api.Controller
 		}
 
 		[HttpPost("")]
-		public async Task<ActionResult<GenreDto>> AddGenre(GenreDto genreDto)
+		public async Task<ActionResult<GenreDto>> AddGenre(AddGenreDto dto)
 		{
-			var genre = genreDto.FromDto();
+			var genre = dto.FromDto();
 			Context.Genres.Add(genre);
 			await Context.SaveChangesAsync();
 			Logger.LogInformation(HorudomLogTemplates.CreatedEntity, nameof(Genre), genre);
@@ -84,7 +85,7 @@ namespace Esentis.Horudom.Web.Api.Controller
 		}
 
 		[HttpPut("{id}")]
-		public async Task<ActionResult<GenreDto>> UpdateGenre(int id, GenreDto genreDto)
+		public async Task<ActionResult<GenreDto>> UpdateGenre(int id, AddGenreDto addGenreDto)
 		{
 			var genre = Context.Genres.Where(x => x.Id == id).SingleOrDefault();
 			if (genre == null)
@@ -93,7 +94,7 @@ namespace Esentis.Horudom.Web.Api.Controller
 				return NotFound($"No {nameof(Genre)} with Id {id} found in database");
 			}
 
-			genre.Name = genreDto.Name;
+			genre.Name = addGenreDto.Name;
 			await Context.SaveChangesAsync();
 			Logger.LogInformation(HorudomLogTemplates.Updated, nameof(Genre), genre);
 			return Ok(genre.ToDto());

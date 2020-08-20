@@ -23,6 +23,7 @@ namespace Horudom.Dto
 
 		public List<long> WriterIds { get; set; }
 
-		public List<long> PosterIds { get; set; }
+		public List<Uri> PosterUrls { get; set; }
+
 	}
 }

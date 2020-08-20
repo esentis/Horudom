@@ -5,6 +5,7 @@ namespace Esentis.Horudom.Web.Api.Controller
 	using System.Threading.Tasks;
 
 	using Esentis.Horudom.Web.Api.Helpers;
+	using Esentis.Horudom.Web.Models.Dto;
 
 	using global::Horudom.Data;
 	using global::Horudom.Dto;
@@ -51,9 +52,9 @@ namespace Esentis.Horudom.Web.Api.Controller
 		}
 
 		[HttpPost("")]
-		public async Task<ActionResult<WriterDto>> AddWriter(WriterDto writerDto)
+		public async Task<ActionResult<WriterDto>> AddWriter(AddWriterDto dto)
 		{
-			var writer = writerDto.FromDto();
+			var writer = dto.FromDto();
 			Context.Writers.Add(writer);
 			await Context.SaveChangesAsync();
 			Logger.LogInformation(HorudomLogTemplates.CreatedEntity, nameof(Writer), writer);
@@ -84,7 +85,7 @@ namespace Esentis.Horudom.Web.Api.Controller
 		}
 
 		[HttpPut("{id}")]
-		public async Task<ActionResult<WriterDto>> UpdateWriter(int id, WriterDto writerDto)
+		public async Task<ActionResult<WriterDto>> UpdateWriter(int id, AddWriterDto dto)
 		{
 			var writer = Context.Writers.Where(x => x.Id == id).SingleOrDefault();
 			if (writer == null)
@@ -93,10 +94,10 @@ namespace Esentis.Horudom.Web.Api.Controller
 				return NotFound($"No {nameof(Writer)} with Id {id} found in database");
 			}
 
-			writer.Firstname = writerDto.Firstname;
-			writer.Bio = writerDto.Bio;
-			writer.BirthDate = writerDto.BirthDate;
-			writer.Lastname = writerDto.Lastname;
+			writer.Firstname = dto.Firstname;
+			writer.Bio = dto.Bio;
+			writer.BirthDate = dto.BirthDate;
+			writer.Lastname = dto.Lastname;
 			await Context.SaveChangesAsync();
 			Logger.LogInformation(HorudomLogTemplates.Updated, nameof(Writer), writer);
 			return Ok(writer.ToDto());

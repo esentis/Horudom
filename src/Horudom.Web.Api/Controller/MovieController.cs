@@ -34,18 +34,21 @@ namespace Horudom.Controller
 		}
 
 		[HttpPost("")]
-		public async Task<ActionResult<MovieDto>> AddMovie([FromBody] AddMovieDto movieToAdd)
+		public async Task<ActionResult<MovieDto>> AddMovie([FromBody] AddMovieDto dto)
 		{
-			var movie = movieToAdd.FromDto();
+			var movie = dto.FromDto();
 
-			var actorIds = movieToAdd.ActorIds.Distinct().OrderBy(x => x).ToList();
-			var directorIds = movieToAdd.DirectorIds.Distinct().OrderBy(x => x).ToList();
-			var writerIds = movieToAdd.WriterIds.Distinct().OrderBy(x => x).ToList();
-			var genreIds = movieToAdd.GenreIds.Distinct().OrderBy(x => x).ToList();
+			var actorIds = dto.ActorIds.Distinct().OrderBy(x => x).ToList();
+			var directorIds = dto.DirectorIds.Distinct().OrderBy(x => x).ToList();
+			var writerIds = dto.WriterIds.Distinct().OrderBy(x => x).ToList();
+			var genreIds = dto.GenreIds.Distinct().OrderBy(x => x).ToList();
+			var posterUrls = dto.PosterUrls.Distinct().ToList();
+
 			var actors = await Context.Actors.Where(x => actorIds.Contains(x.Id)).ToListAsync();
 			var genres = await Context.Genres.Where(x => genreIds.Contains(x.Id)).ToListAsync();
 			var directors = await Context.Directors.Where(x => directorIds.Contains(x.Id)).ToListAsync();
 			var writers = await Context.Writers.Where(x => writerIds.Contains(x.Id)).ToListAsync();
+
 			var missingDirectors = directorIds.Except(directors.Select(a => a.Id)).ToList();
 			var missingActors = actorIds.Except(actors.Select(a => a.Id)).ToList();
 			var missingGenres = genreIds.Except(genres.Select(a => a.Id)).ToList();
@@ -79,10 +82,12 @@ namespace Horudom.Controller
 			var movieDirectors = directors.Select(x => new MovieDirector { Director = x, Movie = movie }).ToList();
 			var movieWriters = writers.Select(x => new MovieWriter { Writer = x, Movie = movie }).ToList();
 			var movieGenres = genres.Select(x => new MovieGenre { Genre = x, Movie = movie }).ToList();
+			var posters = posterUrls.Select(x => new Poster { Movie = movie, Url = x }).ToList();
 			Context.MovieActors.AddRange(movieActors);
 			Context.MovieDirectors.AddRange(movieDirectors);
 			Context.MovieWriters.AddRange(movieWriters);
 			Context.MovieGenres.AddRange(movieGenres);
+			Context.Posters.AddRange(posters);
 			Context.Movies.Add(movie);
 			await Context.SaveChangesAsync();
 			Logger.LogInformation(HorudomLogTemplates.CreatedEntity, nameof(Movie), movie);

@@ -2,6 +2,8 @@ namespace Horudom.Helpers
 {
 	using System;
 
+	using Esentis.Horudom.Web.Models.Dto;
+
 	using Horudom.Dto;
 	using Horudom.Models;
 
@@ -100,7 +102,7 @@ namespace Horudom.Helpers
 			return new ScreenshotDto
 			{
 				Id = screenshot.Id,
-				Url = screenshot.Url,
+				Url = screenshot.FilePath,
 			};
 		}
 
@@ -135,7 +137,23 @@ namespace Horudom.Helpers
 			};
 		}
 
-		public static Actor FromDto(this ActorDto addActorDto)
+		public static Actor FromDto(this ActorDto actorDto)
+		{
+			if (actorDto == null)
+			{
+				throw new ArgumentNullException(nameof(actorDto));
+			}
+
+			return new Actor
+			{
+				Bio = actorDto.Bio,
+				BirthDate = actorDto.BirthDate,
+				Firstname = actorDto.Firstname,
+				Lastname = actorDto.Lastname,
+			};
+		}
+
+		public static Actor FromDto(this AddActorDto addActorDto)
 		{
 			if (addActorDto == null)
 			{
@@ -151,23 +169,55 @@ namespace Horudom.Helpers
 			};
 		}
 
-		public static Director FromDto(this DirectorDto addDirectorDto)
+		public static Director FromDto(this DirectorDto directorDto)
 		{
-			if (addDirectorDto == null)
+			if (directorDto == null)
 			{
-				throw new ArgumentNullException(nameof(addDirectorDto));
+				throw new ArgumentNullException(nameof(directorDto));
 			}
 
 			return new Director
 			{
-				Bio = addDirectorDto.Bio,
-				BirthDate = addDirectorDto.BirthDate,
-				Firstname = addDirectorDto.Firstname,
-				Lastname = addDirectorDto.Lastname,
+				Bio = directorDto.Bio,
+				BirthDate = directorDto.BirthDate,
+				Firstname = directorDto.Firstname,
+				Lastname = directorDto.Lastname,
 			};
 		}
 
-		public static Writer FromDto(this WriterDto addWriterDto)
+		public static Director FromDto(this AddDirectorDto directorDto)
+		{
+			if (directorDto == null)
+			{
+				throw new ArgumentNullException(nameof(directorDto));
+			}
+
+			return new Director
+			{
+				Bio = directorDto.Bio,
+				BirthDate = directorDto.BirthDate,
+				Firstname = directorDto.Firstname,
+				Lastname = directorDto.Lastname,
+			};
+		}
+
+		public static Writer FromDto(this WriterDto writerDto)
+		{
+			if (writerDto == null)
+			{
+				throw new ArgumentNullException(nameof(writerDto));
+			}
+
+			return new Writer
+			{
+				Bio = writerDto.Bio,
+				BirthDate = writerDto.BirthDate,
+				Firstname = writerDto.Firstname,
+				Lastname = writerDto.Lastname,
+			};
+		}
+
+		public static Writer FromDto(this AddWriterDto addWriterDto)
 		{
 			if (addWriterDto == null)
 			{
@@ -183,16 +233,42 @@ namespace Horudom.Helpers
 			};
 		}
 
-		public static Genre FromDto(this GenreDto addGenre)
+		public static Genre FromDto(this GenreDto genreDto)
 		{
-			if (addGenre == null)
+			if (genreDto == null)
 			{
-				throw new ArgumentNullException(nameof(addGenre));
+				throw new ArgumentNullException(nameof(genreDto));
 			}
 
 			return new Genre
 			{
-				 Name = addGenre.Name,
+				 Name = genreDto.Name,
+			};
+		}
+
+		public static Genre FromDto(this AddGenreDto addGenreDto)
+		{
+			if (addGenreDto == null)
+			{
+				throw new ArgumentNullException(nameof(addGenreDto));
+			}
+
+			return new Genre
+			{
+				Name = addGenreDto.Name,
+			};
+		}
+
+		public static Poster FromDto(this PosterDto posterDto)
+		{
+			if (posterDto == null)
+			{
+				throw new ArgumentNullException(nameof(posterDto));
+			}
+
+			return new Poster
+			{
+				Url = posterDto.Url,
 			};
 		}
 	}
