@@ -5,11 +5,15 @@ namespace Horudom.Controller
 	using System.Threading.Tasks;
 
 	using Esentis.Horudom.Web.Api.Helpers;
+	using Esentis.Horudom.Web.Models.Dto;
+
 	using Horudom.Data;
 	using Horudom.Dto;
 	using Horudom.Helpers;
 	using Horudom.Models;
+
 	using Kritikos.StructuredLogging.Templates;
+
 	using Microsoft.AspNetCore.Mvc;
 	using Microsoft.EntityFrameworkCore;
 	using Microsoft.Extensions.Logging;
@@ -24,12 +28,31 @@ namespace Horudom.Controller
 		}
 
 		[HttpGet("")]
-		public async Task<ActionResult<List<MovieDto>>> GetMovies()
+		public async Task<ActionResult<PagedResult<MovieDto>>> GetMovies([PositiveNumberValidator] int page, [ItemPerPageValidator] int itemsPerPage)
 		{
-			var movies = Context.Movies;
+			var toSkip = itemsPerPage * (page - 1);
+			var moviesQuery = Context.Movies
+				.TagWith("Retrieving all movies")
+				.OrderBy(x => x.Id);
 
-			var result = await movies.Select(x => x.ToDto()).ToListAsync();
-			Logger.LogInformation(HorudomLogTemplates.RequestEntities, nameof(Movie), result.Count);
+			var totalMovies = await moviesQuery.CountAsync();
+			if (page > ((totalMovies / itemsPerPage) + 1))
+			{
+				return BadRequest("Page doesn't exist");
+			}
+
+			var pagedProducts = await moviesQuery
+				.Skip(toSkip)
+				.Take(itemsPerPage)
+				.ToListAsync();
+			var result = new PagedResult<MovieDto>
+			{
+				Results = pagedProducts.Select(x => x.ToDto()).ToList(),
+				Page = page,
+				TotalPages = (totalMovies / itemsPerPage) + 1,
+				TotalMovies = totalMovies,
+			};
+			Logger.LogInformation(HorudomLogTemplates.RequestEntities, nameof(Movie), totalMovies);
 			return Ok(result);
 		}
 

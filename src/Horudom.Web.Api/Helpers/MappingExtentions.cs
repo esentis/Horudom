@@ -242,7 +242,7 @@ namespace Horudom.Helpers
 
 			return new Genre
 			{
-				 Name = genreDto.Name,
+				Name = genreDto.Name,
 			};
 		}
 
