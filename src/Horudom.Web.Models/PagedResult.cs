@@ -12,6 +12,6 @@ namespace Esentis.Horudom.Web.Models.Dto
 
 		public int TotalPages { get; set; }
 
-		public int TotalMovies { get; set; }
+		public int TotalElements { get; set; }
 	}
 }

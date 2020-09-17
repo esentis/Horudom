@@ -50,7 +50,7 @@ namespace Horudom.Controller
 				Results = pagedProducts.Select(x => x.ToDto()).ToList(),
 				Page = page,
 				TotalPages = (totalMovies / itemsPerPage) + 1,
-				TotalMovies = totalMovies,
+				TotalElements = totalMovies,
 			};
 			Logger.LogInformation(HorudomLogTemplates.RequestEntities, nameof(Movie), totalMovies);
 			return Ok(result);
