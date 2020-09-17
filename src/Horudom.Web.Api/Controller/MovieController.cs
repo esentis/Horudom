@@ -61,6 +61,13 @@ namespace Horudom.Controller
 		{
 			var movie = dto.FromDto();
 
+			var checkMovie = Context.Movies.FirstOrDefault(x => x.Title == movie.Title);
+
+			if (checkMovie != null)
+			{
+				return Conflict($"Movie {movie.Title} already exists in the database!");
+			}
+
 			var actorIds = dto.ActorIds.Distinct().OrderBy(x => x).ToList();
 			var directorIds = dto.DirectorIds.Distinct().OrderBy(x => x).ToList();
 			var writerIds = dto.WriterIds.Distinct().OrderBy(x => x).ToList();
