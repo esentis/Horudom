@@ -120,6 +120,10 @@ namespace Horudom.Controller
 		[HttpGet("{title}")]
 		public async Task<ActionResult<List<MovieDto>>> GetMoviesByTitle(string title)
 		{
+			if (title.Length < 4)
+			{
+				return BadRequest("At least 4 characters are required.");
+			}
 			var normalizedTitle = title.NormalizeSearch();
 #pragma warning disable CA1307 // I think this is a false alarm
 			var movies = await Context.Movies.Where(x => x.NormalizedTitle.Contains(normalizedTitle)).ToListAsync();
