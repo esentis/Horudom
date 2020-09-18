@@ -28,10 +28,31 @@ namespace Esentis.Horudom.Web.Api.Controller
 		}
 
 		[HttpGet("")]
-		public async Task<ActionResult<List<ActorDto>>> GetActors()
+		public async Task<ActionResult<List<ActorDto>>> GetActors([PositiveNumberValidator] int page, [ItemPerPageValidator] int itemsPerPage)
 		{
-			var result = await Context.Actors.Select(x => x.ToDto()).ToListAsync();
-			Logger.LogInformation(HorudomLogTemplates.RequestEntities, nameof(Actor), result.Count);
+			var toSkip = itemsPerPage * (page - 1);
+			var actorsQuery = Context.Actors
+				.TagWith("Retrieving all actors")
+				.OrderBy(x => x.Id);
+
+			var totalActors = await actorsQuery.CountAsync();
+			if (page > ((totalActors / itemsPerPage) + 1))
+			{
+				return BadRequest("Page doesn't exist");
+			}
+
+			var pagedActors = await actorsQuery
+				.Skip(toSkip)
+				.Take(itemsPerPage)
+				.ToListAsync();
+			var result = new PagedResult<ActorDto>
+			{
+				Results = pagedActors.Select(x => x.ToDto()).ToList(),
+				Page = page,
+				TotalPages = (totalActors / itemsPerPage) + 1,
+				TotalElements = totalActors,
+			};
+			Logger.LogInformation(HorudomLogTemplates.RequestEntities, nameof(Actor), totalActors);
 			return Ok(result);
 		}
 

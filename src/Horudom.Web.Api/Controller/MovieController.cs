@@ -41,13 +41,13 @@ namespace Horudom.Controller
 				return BadRequest("Page doesn't exist");
 			}
 
-			var pagedProducts = await moviesQuery
+			var pagedMovies = await moviesQuery
 				.Skip(toSkip)
 				.Take(itemsPerPage)
 				.ToListAsync();
 			var result = new PagedResult<MovieDto>
 			{
-				Results = pagedProducts.Select(x => x.ToDto()).ToList(),
+				Results = pagedMovies.Select(x => x.ToDto()).ToList(),
 				Page = page,
 				TotalPages = (totalMovies / itemsPerPage) + 1,
 				TotalElements = totalMovies,
