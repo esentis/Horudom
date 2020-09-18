@@ -30,10 +30,31 @@ namespace Esentis.Horudom.Web.Api.Controller
 		}
 
 		[HttpGet("")]
-		public async Task<ActionResult<List<DirectorDto>>> GetDirectors()
+		public async Task<ActionResult<List<DirectorDto>>> GetDirectors([PositiveNumberValidator] int page, [ItemPerPageValidator] int itemsPerPage)
 		{
-			var result = await Context.Directors.Select(x => x.ToDto()).ToListAsync();
-			Logger.LogInformation(HorudomLogTemplates.RequestEntities, nameof(Director), result.Count);
+			var toSkip = itemsPerPage * (page - 1);
+			var directorsQuery = Context.Directors
+				.TagWith("Retrieving all directors")
+				.OrderBy(x => x.Id);
+
+			var totalDirectors = await directorsQuery.CountAsync();
+			if (page > ((totalDirectors / itemsPerPage) + 1))
+			{
+				return BadRequest("Page doesn't exist");
+			}
+
+			var pagedDirectors = await directorsQuery
+				.Skip(toSkip)
+				.Take(itemsPerPage)
+				.ToListAsync();
+			var result = new PagedResult<DirectorDto>
+			{
+				Results = pagedDirectors.Select(x => x.ToDto()).ToList(),
+				Page = page,
+				TotalPages = (totalDirectors / itemsPerPage) + 1,
+				TotalElements = totalDirectors,
+			};
+			Logger.LogInformation(HorudomLogTemplates.RequestEntities, nameof(Director), totalDirectors);
 			return Ok(result);
 		}
 

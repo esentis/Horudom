@@ -28,10 +28,31 @@ namespace Esentis.Horudom.Web.Api.Controller
 		}
 
 		[HttpGet("")]
-		public async Task<ActionResult<List<WriterDto>>> GetWriters()
+		public async Task<ActionResult<List<WriterDto>>> GetWriters([PositiveNumberValidator] int page, [ItemPerPageValidator] int itemsPerPage)
 		{
-			var result = await Context.Writers.Select(x => x.ToDto()).ToListAsync();
-			Logger.LogInformation(HorudomLogTemplates.RequestEntities, nameof(Writer), result.Count);
+			var toSkip = itemsPerPage * (page - 1);
+			var writerQuery = Context.Writers
+				.TagWith("Retrieving all writers")
+				.OrderBy(x => x.Id);
+
+			var totalWriters = await writerQuery.CountAsync();
+			if (page > ((totalWriters / itemsPerPage) + 1))
+			{
+				return BadRequest("Page doesn't exist");
+			}
+
+			var pagedWriters = await writerQuery
+				.Skip(toSkip)
+				.Take(itemsPerPage)
+				.ToListAsync();
+			var result = new PagedResult<WriterDto>
+			{
+				Results = pagedWriters.Select(x => x.ToDto()).ToList(),
+				Page = page,
+				TotalPages = (totalWriters / itemsPerPage) + 1,
+				TotalElements = totalWriters,
+			};
+			Logger.LogInformation(HorudomLogTemplates.RequestEntities, nameof(Writer), totalWriters);
 			return Ok(result);
 		}
 

@@ -41,16 +41,16 @@ namespace Horudom.Controller
 				return BadRequest("Page doesn't exist");
 			}
 
-			var pagedProducts = await moviesQuery
+			var pagedMovies = await moviesQuery
 				.Skip(toSkip)
 				.Take(itemsPerPage)
 				.ToListAsync();
 			var result = new PagedResult<MovieDto>
 			{
-				Results = pagedProducts.Select(x => x.ToDto()).ToList(),
+				Results = pagedMovies.Select(x => x.ToDto()).ToList(),
 				Page = page,
 				TotalPages = (totalMovies / itemsPerPage) + 1,
-				TotalMovies = totalMovies,
+				TotalElements = totalMovies,
 			};
 			Logger.LogInformation(HorudomLogTemplates.RequestEntities, nameof(Movie), totalMovies);
 			return Ok(result);
@@ -60,7 +60,6 @@ namespace Horudom.Controller
 		public async Task<ActionResult<MovieDto>> AddMovie([FromBody] AddMovieDto dto)
 		{
 			var movie = dto.FromDto();
-
 			var actorIds = dto.ActorIds.Distinct().OrderBy(x => x).ToList();
 			var directorIds = dto.DirectorIds.Distinct().OrderBy(x => x).ToList();
 			var writerIds = dto.WriterIds.Distinct().OrderBy(x => x).ToList();
@@ -120,6 +119,10 @@ namespace Horudom.Controller
 		[HttpGet("{title}")]
 		public async Task<ActionResult<List<MovieDto>>> GetMoviesByTitle(string title)
 		{
+			if (title.Length < 4)
+			{
+				return BadRequest("At least 4 characters are required.");
+			}
 			var normalizedTitle = title.NormalizeSearch();
 #pragma warning disable CA1307 // I think this is a false alarm
 			var movies = await Context.Movies.Where(x => x.NormalizedTitle.Contains(normalizedTitle)).ToListAsync();

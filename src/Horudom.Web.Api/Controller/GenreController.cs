@@ -28,10 +28,31 @@ namespace Esentis.Horudom.Web.Api.Controller
 		}
 
 		[HttpGet("")]
-		public async Task<ActionResult<List<GenreDto>>> GetGenres()
+		public async Task<ActionResult<List<GenreDto>>> GetGenres([PositiveNumberValidator] int page, [ItemPerPageValidator] int itemsPerPage)
 		{
-			var result = await Context.Genres.Select(x => x.ToDto()).ToListAsync();
-			Logger.LogInformation(HorudomLogTemplates.RequestEntities, nameof(Genre), result.Count);
+			var toSkip = itemsPerPage * (page - 1);
+			var genreQuery = Context.Genres
+				.TagWith("Retrieving all genres")
+				.OrderBy(x => x.Id);
+
+			var totalGenres = await genreQuery.CountAsync();
+			if (page > ((totalGenres / itemsPerPage) + 1))
+			{
+				return BadRequest("Page doesn't exist");
+			}
+
+			var pagedGenres = await genreQuery
+				.Skip(toSkip)
+				.Take(itemsPerPage)
+				.ToListAsync();
+			var result = new PagedResult<GenreDto>
+			{
+				Results = pagedGenres.Select(x => x.ToDto()).ToList(),
+				Page = page,
+				TotalPages = (totalGenres / itemsPerPage) + 1,
+				TotalElements = totalGenres,
+			};
+			Logger.LogInformation(HorudomLogTemplates.RequestEntities, nameof(Genre), totalGenres);
 			return Ok(result);
 		}
 
