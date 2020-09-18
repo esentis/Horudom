@@ -55,7 +55,7 @@ namespace Horudom
 			});
 
 			// For production. Flutter cant recognize local certificate
-			//app.UseHttpsRedirection();
+			app.UseHttpsRedirection();
 
 			app.UseRouting();
 
