@@ -42,11 +42,6 @@ namespace Horudom.Data
 				throw new ArgumentNullException(nameof(modelBuilder));
 			}
 
-			modelBuilder.Entity<Movie>(e =>
-			{
-				e.HasIndex(mv => mv.Title).IsUnique();
-			});
-
 			modelBuilder.Entity<MovieActor>(e =>
 			{
 				e.HasOne(mv => mv.Movie)
