@@ -2,6 +2,10 @@ namespace Horudom
 {
 	using System;
 	using System.IO;
+	using System.Threading.Tasks;
+
+	using Esentis.Horudom.Web.Api.Providers;
+	using Esentis.Horudom.Web.Api.Services;
 
 	using Horudom.Data;
 
@@ -12,6 +16,8 @@ namespace Horudom
 	using Microsoft.Extensions.DependencyInjection;
 	using Microsoft.Extensions.Hosting;
 	using Microsoft.OpenApi.Models;
+
+	using Refit;
 
 	public class Startup
 	{
@@ -38,6 +44,15 @@ namespace Horudom
 				c.IncludeXmlComments(filePath);
 				c.DescribeAllParametersInCamelCase();
 			});
+
+			var settings = new RefitSettings
+			{
+				AuthorizationHeaderValueGetter = () => Task.FromResult(Configuration["ApiKeys:TMDB"]),
+			};
+			services.AddScoped(sp => RestService.For<ITheMovieDb>("https://api.themoviedb.org/3", settings));
+			services.AddHostedService<ActorMetadataUpdateService>();
+			services.AddHostedService<WriterMetadataUpdateService>();
+			services.AddHostedService<DirectorMetadataUpdateService>();
 		}
 
 		public void Configure(IApplicationBuilder app)
