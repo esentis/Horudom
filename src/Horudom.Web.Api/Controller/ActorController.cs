@@ -109,10 +109,9 @@ namespace Esentis.Horudom.Web.Api.Controller
 				return NotFound($"No {nameof(Actor)} with Id {id} found in database");
 			}
 
-			actor.Firstname = dto.Firstname;
+			actor.Name = dto.Name;
 			actor.Bio = dto.Bio;
 			actor.BirthDate = dto.BirthDate;
-			actor.Lastname = dto.Lastname;
 			await Context.SaveChangesAsync();
 			Logger.LogInformation(HorudomLogTemplates.Updated, nameof(Actor), actor);
 			return Ok(actor.ToDto());
