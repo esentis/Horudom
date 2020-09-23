@@ -6,7 +6,6 @@ namespace Horudom.Models
 
 	public class Actor
 	{
-
 		private string name = string.Empty;
 
 		public long Id { get; set; }

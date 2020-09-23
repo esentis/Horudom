@@ -123,6 +123,7 @@ namespace Horudom.Controller
 			{
 				return BadRequest("At least 4 characters are required.");
 			}
+
 			var normalizedTitle = title.NormalizeSearch();
 #pragma warning disable CA1307 // I think this is a false alarm
 			var movies = await Context.Movies.Where(x => x.NormalizedTitle.Contains(normalizedTitle)).ToListAsync();

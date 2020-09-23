@@ -24,7 +24,6 @@ namespace Esentis.Horudom.Web.Api.Controller
 	[ApiController]
 	public class ScreenshotController : BaseController<ScreenshotController>
 	{
-
 		private static readonly DirectoryInfo Screenshots = new DirectoryInfo(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Horudom"));
 
 		public ScreenshotController(HorudomContext ctx, ILogger<ScreenshotController> logger)
@@ -75,7 +74,7 @@ namespace Esentis.Horudom.Web.Api.Controller
 
 			var name = Guid.NewGuid().ToString("D");
 			var path = Path.Combine(Screenshots.FullName, $"{name}.{Path.GetExtension(file.FileName)}");
-			var screenshot = new Screenshot { FilePath = path, Movie = movie};
+			var screenshot = new Screenshot { FilePath = path, Movie = movie };
 			using (var stream = System.IO.File.Create(path))
 			{
 				await file.CopyToAsync(stream);
@@ -84,7 +83,6 @@ namespace Esentis.Horudom.Web.Api.Controller
 			Context.Screenshots.Add(screenshot);
 			await Context.SaveChangesAsync();
 			return Ok(screenshot.ToDto());
-
 		}
 
 		[HttpGet("{id}/download")]
