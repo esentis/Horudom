@@ -6,9 +6,7 @@ namespace Horudom.Dto
 	{
 		public long Id { get; set; }
 
-		public string Firstname { get; set; }
-
-		public string Lastname { get; set; }
+		public string Name { get; set; }
 
 		public DateTimeOffset BirthDate { get; set; }
 

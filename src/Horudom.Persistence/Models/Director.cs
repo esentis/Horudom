@@ -6,38 +6,28 @@ namespace Horudom.Models
 
 	public class Director
 	{
-		private string firstname = string.Empty;
-
-		private string lastname = string.Empty;
+		private string name = string.Empty;
 
 		public long Id { get; set; }
 
-		public string Firstname
+		public string Name
 		{
-			get => firstname;
+			get => name;
 			set
 			{
-				firstname = value;
-				NormalizedFirstname = value.NormalizeSearch();
+				name = value;
+				NormalizedName = value.NormalizeSearch();
 			}
 		}
 
-		public string NormalizedFirstname { get; private set; }
-
-		public string Lastname
-		{
-			get => lastname;
-			set
-			{
-				lastname = value;
-				NormalizedLastname = value.NormalizeSearch();
-			}
-		}
-
-		public string NormalizedLastname { get; private set; }
+		public string NormalizedName { get; private set; }
 
 		public DateTimeOffset BirthDate { get; set; }
 
 		public string Bio { get; set; }
+
+		public DateTimeOffset LastScrape { get; set; }
+
+		public long? TmdbId { get; set; }
 	}
 }

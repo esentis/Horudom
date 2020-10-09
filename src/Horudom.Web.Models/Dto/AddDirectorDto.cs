@@ -4,9 +4,7 @@ namespace Esentis.Horudom.Web.Models.Dto
 
 	public class AddDirectorDto
 	{
-		public string Firstname { get; set; }
-
-		public string Lastname { get; set; }
+		public string Name { get; set; }
 
 		public DateTimeOffset BirthDate { get; set; }
 

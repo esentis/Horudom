@@ -59,9 +59,9 @@ namespace Horudom
 
 				await host.RunAsync();
 			}
-			catch (InvalidOperationException)
+			catch (InvalidOperationException e)
 			{
-				Log.Fatal("Could not apply migrations ");
+				Log.Fatal(e, "Could not apply migrations");
 			}
 #pragma warning disable CA1031 // Unhandled exception, application terminated
 			catch (Exception e)

@@ -37,8 +37,7 @@ namespace Horudom.Helpers
 			return new ActorDto
 			{
 				Id = actor.Id,
-				Firstname = actor.Firstname,
-				Lastname = actor.Lastname,
+				Name = actor.Name,
 				Bio = actor.Bio,
 				BirthDate = actor.BirthDate,
 			};
@@ -54,10 +53,9 @@ namespace Horudom.Helpers
 			return new DirectorDto
 			{
 				Id = director.Id,
-				Firstname = director.Firstname,
+				Name = director.Name,
 				Bio = director.Bio,
 				BirthDate = director.BirthDate,
-				Lastname = director.Lastname,
 			};
 		}
 
@@ -71,8 +69,7 @@ namespace Horudom.Helpers
 			return new WriterDto
 			{
 				Id = writer.Id,
-				Firstname = writer.Firstname,
-				Lastname = writer.Lastname,
+				Name = writer.Name,
 				Bio = writer.Bio,
 				BirthDate = writer.BirthDate,
 			};
@@ -148,8 +145,7 @@ namespace Horudom.Helpers
 			{
 				Bio = actorDto.Bio,
 				BirthDate = actorDto.BirthDate,
-				Firstname = actorDto.Firstname,
-				Lastname = actorDto.Lastname,
+				Name = actorDto.Name,
 			};
 		}
 
@@ -164,8 +160,7 @@ namespace Horudom.Helpers
 			{
 				Bio = addActorDto.Bio,
 				BirthDate = addActorDto.BirthDate,
-				Firstname = addActorDto.Firstname,
-				Lastname = addActorDto.Lastname,
+				Name = addActorDto.Name,
 			};
 		}
 
@@ -180,8 +175,7 @@ namespace Horudom.Helpers
 			{
 				Bio = directorDto.Bio,
 				BirthDate = directorDto.BirthDate,
-				Firstname = directorDto.Firstname,
-				Lastname = directorDto.Lastname,
+				Name = directorDto.Name,
 			};
 		}
 
@@ -196,8 +190,7 @@ namespace Horudom.Helpers
 			{
 				Bio = directorDto.Bio,
 				BirthDate = directorDto.BirthDate,
-				Firstname = directorDto.Firstname,
-				Lastname = directorDto.Lastname,
+				Name = directorDto.Name,
 			};
 		}
 
@@ -212,8 +205,7 @@ namespace Horudom.Helpers
 			{
 				Bio = writerDto.Bio,
 				BirthDate = writerDto.BirthDate,
-				Firstname = writerDto.Firstname,
-				Lastname = writerDto.Lastname,
+				Name = writerDto.Name,
 			};
 		}
 
@@ -228,8 +220,7 @@ namespace Horudom.Helpers
 			{
 				Bio = addWriterDto.Bio,
 				BirthDate = addWriterDto.BirthDate,
-				Firstname = addWriterDto.Firstname,
-				Lastname = addWriterDto.Lastname,
+				Name = addWriterDto.Name,
 			};
 		}
 
